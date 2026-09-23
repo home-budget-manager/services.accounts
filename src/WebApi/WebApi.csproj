@@ -4,8 +4,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-		<AssemblyName>HomeBudgetManager.Bff.WebUI.WebApi</AssemblyName>
-		<RootNamespace>HomeBudgetManager.Bff.WebUI.WebApi</RootNamespace>
+		<AssemblyName>HomeBudgetManager.Services.Accounts.WebApi</AssemblyName>
+		<RootNamespace>HomeBudgetManager.Services.Accounts.WebApi</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -5,8 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-		<AssemblyName>HomeBudgetManager.Bff.WebUI.WebApi.UnitTests</AssemblyName>
-		<RootNamespace>HomeBudgetManager.Bff.WebUI.WebApi.UnitTests</RootNamespace>
+		<AssemblyName>HomeBudgetManager.Services.Accounts.WebApi.UnitTests</AssemblyName>
+		<RootNamespace>HomeBudgetManager.Services.Accounts.WebApi.UnitTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
