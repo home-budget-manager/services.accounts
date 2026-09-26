@@ -1,0 +1,52 @@
+name: CD Develop
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+concurrency:
+  group: cd-develop
+  cancel-in-progress: true
+
+jobs:
+  build-and-push:
+    name: Build and push Docker image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Read version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$(grep -E '^version:' .github/workflows/version | cut -d':' -f2- | xargs)
+          if [ -z "$VERSION" ]; then
+            echo "version is empty in .github/workflows/version"
+            exit 1
+          fi
+          RUN_DATE=$(date -u "+%Y%m%d%H%M%S")
+          echo "tag=${VERSION}-develop-${RUN_DATE}" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Api.Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.tag }}
+            ghcr.io/${{ github.repository }}:develop
