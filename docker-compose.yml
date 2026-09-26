@@ -1,0 +1,11 @@
+name: home-budget-manager-services.accounts-local
+
+services:
+  services.accounts:
+    image: home-budget-manager/services.accounts:dev
+    build:
+      context: .
+      dockerfile: Api.Dockerfile
+    restart: always
+    ports:
+      - "5002:8080"

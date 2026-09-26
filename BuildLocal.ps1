@@ -1,0 +1,1 @@
+docker build -f Api.Dockerfile -t home-budget-manager/services.accounts:local .
