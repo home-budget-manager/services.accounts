@@ -21,4 +21,21 @@ public class UserAccountsController : ControllerBase
 
         return this.Ok(result);
     }
+
+    [HttpGet("{accountId}")]
+    public IActionResult GetUserAccountDetails(Guid accountId)
+    {
+        var result = new AccountDetails(
+            accountId,
+            "Checking Account",
+            "Checking",
+            DateTimeOffset.UtcNow,
+            "This is a checking account.",
+            1000.00m,
+            50.00m,
+            "USD",
+            true);
+
+        return this.Ok(result);
+    }
 }
