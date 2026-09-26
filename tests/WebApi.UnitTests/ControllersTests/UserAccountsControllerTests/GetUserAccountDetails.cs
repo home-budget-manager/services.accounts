@@ -11,7 +11,7 @@ public class GetUserAccountDetailsTests : TestsBase
     private IActionResult result = null!;
 
     [Fact]
-    public void WhenUserAccountsAreRequestedThenCorrectAccountsAreReturned()
+    public void WhenUserAccountDetailsAreRequestedThenCorrectAccountDetailsAreReturned()
     {
         this.Given(t => t.InstanceIsCreated())
             .And(t => t.AccountIdIs(Guid.NewGuid()))
