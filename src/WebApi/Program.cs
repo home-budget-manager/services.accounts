@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Cors.Infrastructure;
 
+using HomeBudgetManager.Services.Accounts.Application;
+
 var builder = WebApplication.CreateBuilder(args);
 var corsSettings = builder.Configuration.GetSection(CorsSettings.SectionName).Get<CorsSettings>() ?? new();
 
@@ -17,6 +19,7 @@ builder.Services.AddCors(options =>
         Configure(policyBuilder, corsSettings.AllowedHeaders, static builder => builder.AllowAnyHeader(), static (builder, values) => builder.WithHeaders(values));
     });
 });
+builder.Services.AddApplication();
 
 var app = builder.Build();
 

@@ -1,5 +1,7 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.WebApi.Controllers;
 
+using HomeBudgetManager.Services.Accounts.Application;
+using HomeBudgetManager.Services.Accounts.Domain.Accounts;
 using HomeBudgetManager.Services.Accounts.WebApi.Controllers.UserAccounts;
 
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/[controller]")]
 [ApiController]
 
-public class UserAccountsController : ControllerBase
+public class UserAccountsController(
+    IMediator mediator) : ControllerBase
 {
+    private readonly IMediator mediator = mediator;
+
     [HttpGet]
     public IActionResult GetUserAccounts()
     {
@@ -23,19 +28,43 @@ public class UserAccountsController : ControllerBase
     }
 
     [HttpGet("{accountId}")]
-    public IActionResult GetUserAccountDetails(Guid accountId)
+    public async Task<IActionResult> GetUserAccountDetails(Guid accountId, CancellationToken cancellationToken)
     {
-        var result = new AccountDetails(
-            accountId,
-            "Checking Account",
-            "Checking",
+        var query = new GetAccountDetailsQuery(new AccountId(accountId));
+        var result = await this.mediator.Fetch(query, cancellationToken);
+        if (result is null)
+        {
+            return this.NotFound();
+        }
+
+        var output = new AccountDetails(
+            result.Id.ToGuid(),
+            result.Name,
+            result.AccountType.Name,
             DateTimeOffset.UtcNow,
-            "This is a checking account.",
+            result.Description,
             1000.00m,
             50.00m,
-            "USD",
+            result.Currency,
             true);
 
-        return this.Ok(result);
+        return this.Ok(output);
+    }
+
+    [HttpPost]
+    public IActionResult CreateUserAccount([FromBody] NewAccountData input)
+    {
+        var newAccountId = Guid.NewGuid();
+        var account = new AccountDetails(
+            newAccountId,
+            input.Name,
+            input.AccountType,
+            DateTimeOffset.UtcNow,
+            input.Description,
+            0.00m,
+            0.00m,
+            input.Currency,
+            true);
+        return this.CreatedAtAction(nameof(this.GetUserAccountDetails), new { accountId = newAccountId }, account);
     }
 }
