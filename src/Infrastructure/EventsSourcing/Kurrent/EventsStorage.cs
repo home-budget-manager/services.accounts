@@ -1,6 +1,8 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.Infrastructure.EventsSourcing.Kurrent;
 
 using System.Collections.ObjectModel;
+using System.Text;
+using System.Text.Json;
 
 using HomeBudgetManager.Services.Accounts.Application.EventSourcing;
 using HomeBudgetManager.Services.Accounts.Domain;
@@ -10,6 +12,8 @@ using KurrentDB.Client;
 public sealed class EventsStorage(
     KurrentDBClient client) : IEventsStorage
 {
+    private static readonly JsonSerializerOptions serializerOptions = JsonSerializerOptionsFactory.GetOptions();
+
     private readonly KurrentDBClient client = client;
 
     public async Task<IReadOnlyCollection<IAggregateEvent>> Retrieve(Guid aggregateId, CancellationToken cancellationToken)
@@ -70,7 +74,7 @@ public sealed class EventsStorage(
             throw new InvalidOperationException($"Event type '{@event.GetType()}' not found.");
         }
 
-        var eventDataBytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType());
+        var eventDataBytes = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), serializerOptions);
         var eventData = new EventData(
             Uuid.NewUuid(),
             eventType,

@@ -2,6 +2,8 @@
 
 using HomeBudgetManager.Services.Accounts.Infrastructure.Projections.Mongo;
 
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 
 public class MongoDbSettings
@@ -28,6 +30,7 @@ public class MongoDbSettings
         {
             options.DatabaseName = settings.DatabaseName;
         });
+        BsonSerializer.RegisterSerializer(new GuidSerializer(MongoDB.Bson.GuidRepresentation.Standard));
     }
 
     private static MongoClient CreateClient(MongoDbSettings settings)

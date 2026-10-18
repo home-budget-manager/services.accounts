@@ -1,7 +1,9 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.WebApi.Controllers;
 
 using HomeBudgetManager.Services.Accounts.Application;
+using HomeBudgetManager.Services.Accounts.Application.Accounts.Projections.Handlers;
 using HomeBudgetManager.Services.Accounts.Domain.Accounts;
+using HomeBudgetManager.Services.Accounts.Domain.Accounts.AggregateEvents;
 using HomeBudgetManager.Services.Accounts.WebApi.Controllers.UserAccounts;
 
 using Microsoft.AspNetCore.Http;

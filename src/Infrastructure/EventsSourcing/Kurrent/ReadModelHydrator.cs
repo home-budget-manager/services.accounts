@@ -64,14 +64,6 @@ public sealed class ReadModelHydrator(
         var resolvedEvent = subscriptionEvent.ResolvedEvent;
         try
         {
-            //var rawMetadata = GetMetadata(resolvedEvent);
-            //if (string.IsNullOrWhiteSpace(rawMetadata?.EventTypeName))
-            //{
-            //    await subscription.Ack([resolvedEvent]);
-            //    return;
-            //}
-
-            //var metadata = rawMetadata.Value;
             var aggregateEvent = await GetEvent(resolvedEvent);
             if (aggregateEvent is null)
             {
@@ -115,19 +107,5 @@ public sealed class ReadModelHydrator(
             eventDataString,
             eventType,
             JsonSerializerOptionsFactory.GetOptions()) as IAggregateEvent;
-    }
-
-    private EventMetadata? GetMetadata(ResolvedEvent resolvedEvent)
-    {
-        var metadataString = Encoding.UTF8.GetString(resolvedEvent.Event.Metadata.ToArray());
-        if (string.IsNullOrWhiteSpace(metadataString))
-        {
-            return null;
-        }
-
-        var metadata = JsonSerializer.Deserialize<EventMetadata>(
-            metadataString,
-            JsonSerializerOptionsFactory.GetOptions());
-        return metadata;
     }
 }
