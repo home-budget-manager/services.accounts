@@ -20,9 +20,9 @@ public class GetUserAccountsTests : TestsBase
             .BDDfy();
     }
 
-    private void UserAccountsAreRequested()
+    private async Task UserAccountsAreRequested()
     {
-        this.result = this.Instance.GetUserAccounts();
+        this.result = await this.Instance.GetUserAccounts(CancellationToken.None);
     }
 
     private void ResultIsOkObjectResult()

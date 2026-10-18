@@ -20,16 +20,20 @@ public class UserAccountsController(
     private readonly IMediator mediator = mediator;
 
     [HttpGet]
-    public IResult GetUserAccounts()
+    public async Task<IResult> GetUserAccounts(CancellationToken cancellationToken)
     {
-        var result = new AccountInfo[]
-        {
-            new(Guid.NewGuid(), "Checking Account", "Checking", 1000.00m, 50.00m, "USD", true),
-            new(Guid.NewGuid(), "Savings Account", "Savings", 5000.00m, 100.00m, "USD", true),
-            new(Guid.NewGuid(), "Credit Card", "CreditCard", -200.00m, -20.00m, "USD", false),
-        };
+        var query = new GetAccountsListQuery();
+        var result = await this.mediator.Fetch(query, cancellationToken);
+        var output = result.Accounts.Select(account => new AccountInfo(
+            account.Id.ToGuid(),
+            account.Name,
+            account.AccountType.Name,
+            account.Balance,
+            account.CurrentPeriodChange,
+            account.Currency,
+            true)).ToArray();
 
-        return Results.Ok(result);
+        return Results.Ok(output);
     }
 
     [HttpGet("{accountId:guid}", Name = GetAccountDetailsRouteName)]

@@ -1,15 +1,22 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.Application.Accounts;
 
+using System.Security.Cryptography;
+
 using HomeBudgetManager.Services.Accounts.Domain.Accounts;
 
-public sealed class GetAccountDetailsQueryHandler : QueryHandlerBase<GetAccountDetailsQuery, GetAccountDetailsResult?>
+public sealed class GetAccountDetailsQueryHandler(
+    IAccountInfoRepository accountInfoRepository) : QueryHandlerBase<GetAccountDetailsQuery, GetAccountDetailsResult?>
 {
+    private static RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create();
+
+    private readonly IAccountInfoRepository accountInfoRepository = accountInfoRepository;
+
     protected override async Task<GetAccountDetailsResult?> Handle(
         GetAccountDetailsQuery query,
         CancellationToken cancellationToken)
     {
-        await Task.Yield();
-        var account = Application.ReadModel.GetAccountById(query.Id);
+        var account = await this.accountInfoRepository.GetAccount(query.Id.ToGuid(), cancellationToken);
+
         if (account is null)
         {
             return null;

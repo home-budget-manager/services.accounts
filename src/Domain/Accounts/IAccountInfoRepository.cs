@@ -4,5 +4,9 @@ using HomeBudgetManager.Services.Accounts.Domain.Accounts.Projections;
 
 public interface IAccountInfoRepository
 {
-    public Task InsertAccount(AccountInfo accountInfo, CancellationToken cancellationToken);
+    Task InsertAccount(AccountInfo accountInfo, CancellationToken cancellationToken);
+
+    Task<IReadOnlyCollection<AccountInfo>> FindAccounts(CancellationToken cancellationToken);
+
+    Task<AccountInfo?> GetAccount(Guid accountId, CancellationToken cancelationToken);
 }

@@ -2,6 +2,11 @@
 
 using HomeBudgetManager.Services.Accounts.Domain.Accounts;
 using HomeBudgetManager.Services.Accounts.Domain.Accounts.Projections;
+using HomeBudgetManager.Services.Accounts.Domain.Contractors;
+
+using Microsoft.Extensions.Logging;
+
+using MongoDB.Driver;
 
 public sealed class AccountInfoRepository(
     ICollectionProvider collectionProvider) : IAccountInfoRepository
@@ -16,6 +21,47 @@ public sealed class AccountInfoRepository(
             accountInfoDto,
             null,
             cancellationToken);
+    }
+
+    public async Task<IReadOnlyCollection<AccountInfo>> FindAccounts(CancellationToken cancellationToken)
+    {
+        var collection = this.collectionProvider.Accounts;
+        var filter = Builders<AccountInfoDto>.Filter.Eq(p => p.OwnerId, null);
+        var searchOptions = new FindOptions<AccountInfoDto>()
+        {
+        };
+        var itemsMatched = await collection.FindAsync(filter, searchOptions, cancellationToken)
+            .ConfigureAwait(false);
+        var items = await itemsMatched
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        if (items.Count == 0)
+        {
+            return Array.Empty<AccountInfo>();
+        }
+
+        return items.Select(Map).ToList();
+    }
+
+    public async Task<AccountInfo?> GetAccount(Guid accountId, CancellationToken cancelationToken)
+    {
+        var collection = this.collectionProvider.Accounts;
+        var filter = Builders<AccountInfoDto>.Filter.Eq(p => p.Id, accountId);
+        var searchOptions = new FindOptions<AccountInfoDto>()
+        {
+            Limit = 1
+        };
+        var itemsMatched = await collection.FindAsync(filter, searchOptions, cancelationToken)
+            .ConfigureAwait(false);
+        var items = await itemsMatched
+            .ToListAsync(cancelationToken)
+            .ConfigureAwait(false);
+        if (items.Count == 0)
+        {
+            return null;
+        }
+
+        return items.Select(Map).Single();
     }
 
     private static AccountInfoDto Map(AccountInfo accountInfo)
@@ -34,5 +80,19 @@ public sealed class AccountInfoRepository(
             Currency = accountInfo.Currency,
             OwnerId = accountInfo.OwnerId?.Value
         };
+    }
+
+    private static AccountInfo Map(AccountInfoDto accountInfoDto)
+    {
+        return new AccountInfo(
+            new AccountId(accountInfoDto.Id),
+            accountInfoDto.Name,
+            accountInfoDto.CreationDate,
+            accountInfoDto.Description,
+            new AccountType(
+                accountInfoDto.AccountType.Id,
+                accountInfoDto.AccountType.Name),
+            accountInfoDto.Currency,
+            accountInfoDto.OwnerId.HasValue ? new ContractorId(accountInfoDto.OwnerId.Value) : null);
     }
 }

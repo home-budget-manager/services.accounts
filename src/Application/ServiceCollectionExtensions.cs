@@ -18,7 +18,8 @@ public static class ServiceCollectionExtensions
             .RegisterCommandHandler<Domain.Accounts.CreateAccountCommand, Accounts.CreateAccountCommandHandler>();
 
         services
-            .RegisterQueryHandler<Domain.Accounts.GetAccountDetailsResult?, Accounts.GetAccountDetailsQueryHandler>();
+            .RegisterQueryHandler<Domain.Accounts.GetAccountDetailsResult?, Accounts.GetAccountDetailsQueryHandler>()
+            .RegisterQueryHandler<Domain.Accounts.GetAccountsListResult, Accounts.GetAccountsListQueryHandler>();
 
         services
             .RegisterProjectionHandler<Domain.Accounts.AggregateEvents.AccountCreated, Accounts.Projections.Handlers.AccountCreatedProjectionHandler>();
