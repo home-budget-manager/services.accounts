@@ -3,12 +3,13 @@
 using System.Collections.ObjectModel;
 
 using HomeBudgetManager.Services.Accounts.Domain.Accounts;
+using HomeBudgetManager.Services.Accounts.Domain.Accounts.Projections;
 
 internal static class ReadModel
 {
-    private static readonly Collection<Accounts.ReadModel.AccountInfo> Accounts = [];
+    private static readonly Collection<AccountInfo> Accounts = [];
 
-    public static void UpsertAccount(Accounts.ReadModel.AccountInfo accountInfo)
+    public static void UpsertAccount(AccountInfo accountInfo)
     {
         var existingAccount = Accounts.FirstOrDefault(a => a.Id == accountInfo.Id);
         if (existingAccount is not null)
@@ -19,7 +20,7 @@ internal static class ReadModel
         Accounts.Add(accountInfo);
     }
 
-    public static Accounts.ReadModel.AccountInfo? GetAccountById(AccountId accountId)
+    public static AccountInfo? GetAccountById(AccountId accountId)
     {
         return Accounts.FirstOrDefault(a => a.Id == accountId);
     }

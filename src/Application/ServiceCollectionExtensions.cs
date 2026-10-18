@@ -15,8 +15,13 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICommandHandlerFactory, ServiceProviderCommandHandlerFactory>();
         services.AddScoped<IQueryHandlerFactory, ServiceProviderQueryHandlerFactory>();
         services
-            .RegisterCommandHandler<Domain.Accounts.CreateAccountCommand, Accounts.CreateAccountCommandHandler>()
+            .RegisterCommandHandler<Domain.Accounts.CreateAccountCommand, Accounts.CreateAccountCommandHandler>();
+
+        services
             .RegisterQueryHandler<Domain.Accounts.GetAccountDetailsResult?, Accounts.GetAccountDetailsQueryHandler>();
+
+        services
+            .RegisterProjectionHandler<Domain.Accounts.AggregateEvents.AccountCreated, Accounts.Projections.Handlers.AccountCreatedProjectionHandler>();
         var configurationSetup = new ConfigurationSetup();
         configure(configurationSetup);
         configurationSetup.RegisterServices(services);
@@ -40,6 +45,16 @@ public static class ServiceCollectionExtensions
     {
         var key = ServiceProviderQueryHandlerFactory.GetQueryHandlerKey<TResult>();
         services.AddKeyedScoped<IQueryHandler<TResult>, THandler>(key);
+        return services;
+    }
+
+    public static IServiceCollection RegisterProjectionHandler<TEvent, THandler>(
+        this IServiceCollection services)
+        where TEvent : class, IAggregateEvent
+        where THandler : class, IProjectionHandler
+    {
+        var key = typeof(TEvent).AssemblyQualifiedName!;
+        services.AddKeyedTransient<IProjectionHandler, THandler>(key);
         return services;
     }
 }

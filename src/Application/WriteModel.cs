@@ -37,11 +37,12 @@ internal static class WriteModel
     {
         var events = GetAccountEvents(aggregateId);
         var accountAggregate = Domain.Accounts.AccountAggregate.CreateFromEvents(events);
-        var accountInfo = new Accounts.ReadModel.AccountInfo(
+        var accountInfo = new Domain.Accounts.Projections.AccountInfo(
             accountAggregate.Id,
             accountAggregate.Name,
-            accountAggregate.AccountType,
+            DateTimeOffset.Now,
             accountAggregate.Description,
+            accountAggregate.AccountType,
             accountAggregate.Currency,
             accountAggregate.OwnerId);
         ReadModel.UpsertAccount(accountInfo);
