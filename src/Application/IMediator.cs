@@ -4,7 +4,7 @@ using HomeBudgetManager.Services.Accounts.Domain;
 
 public interface IMediator
 {
-    Task<OneOf<CommandResults.Success, CommandResults.Failure>> Execute<TCommand>(TCommand command)
+    Task<OneOf<CommandResults.Success, CommandResults.Failure>> Execute<TCommand>(TCommand command, CancellationToken cancellationToken)
         where TCommand : class, ICommand;
 
     Task<TResult> Fetch<TResult>(IQuery<TResult> query, CancellationToken cancellationToken)

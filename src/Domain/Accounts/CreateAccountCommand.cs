@@ -5,7 +5,7 @@ using HomeBudgetManager.Services.Accounts.Domain.Contractors;
 public sealed class CreateAccountCommand(
     AccountId Id,
     string Name,
-    AccountType AccountType,
+    int accountTypeId,
     string Description,
     string Currency,
     ContractorId? OwnerId) : ICommand
@@ -14,7 +14,7 @@ public sealed class CreateAccountCommand(
 
     public string Name { get; } = Name;
 
-    public AccountType AccountType { get; } = AccountType;
+    public int AccountTypeId { get; } = accountTypeId;
 
     public string Description { get; } = Description;
 

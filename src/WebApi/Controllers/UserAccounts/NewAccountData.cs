@@ -2,13 +2,13 @@
 
 public class NewAccountData(
     string name,
-    string accountType,
+    int accountTypeId,
     string description,
     string currency)
 {
     public string Name { get; } = name;
 
-    public string AccountType { get; } = accountType;
+    public int AccountTypeId { get; } = accountTypeId;
 
     public string Description { get; } = description;
 

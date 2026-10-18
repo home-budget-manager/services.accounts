@@ -4,6 +4,7 @@ using HomeBudgetManager.Services.Accounts.Application;
 using HomeBudgetManager.Services.Accounts.Domain.Accounts;
 using HomeBudgetManager.Services.Accounts.WebApi.Controllers.UserAccounts;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
@@ -12,10 +13,12 @@ using Microsoft.AspNetCore.Mvc;
 public class UserAccountsController(
     IMediator mediator) : ControllerBase
 {
+    private const string GetAccountDetailsRouteName = "GetUserAccountDetails";
+
     private readonly IMediator mediator = mediator;
 
     [HttpGet]
-    public IActionResult GetUserAccounts()
+    public IResult GetUserAccounts()
     {
         var result = new AccountInfo[]
         {
@@ -24,17 +27,17 @@ public class UserAccountsController(
             new(Guid.NewGuid(), "Credit Card", "CreditCard", -200.00m, -20.00m, "USD", false),
         };
 
-        return this.Ok(result);
+        return Results.Ok(result);
     }
 
-    [HttpGet("{accountId}")]
-    public async Task<IActionResult> GetUserAccountDetails(Guid accountId, CancellationToken cancellationToken)
+    [HttpGet("{accountId:guid}", Name = GetAccountDetailsRouteName)]
+    public async Task<IResult> GetUserAccountDetails(Guid accountId, CancellationToken cancellationToken)
     {
         var query = new GetAccountDetailsQuery(new AccountId(accountId));
         var result = await this.mediator.Fetch(query, cancellationToken);
         if (result is null)
         {
-            return this.NotFound();
+            return Results.NotFound();
         }
 
         var output = new AccountDetails(
@@ -48,23 +51,22 @@ public class UserAccountsController(
             result.Currency,
             true);
 
-        return this.Ok(output);
+        return Results.Ok(output);
     }
 
     [HttpPost]
-    public IActionResult CreateUserAccount([FromBody] NewAccountData input)
+    public async Task<IResult> CreateUserAccount([FromBody] NewAccountData input, CancellationToken cancellationToken)
     {
-        var newAccountId = Guid.NewGuid();
-        var account = new AccountDetails(
-            newAccountId,
+        var command = new CreateAccountCommand(
+            AccountId.New(),
             input.Name,
-            input.AccountType,
-            DateTimeOffset.UtcNow,
+            input.AccountTypeId,
             input.Description,
-            0.00m,
-            0.00m,
             input.Currency,
-            true);
-        return this.CreatedAtAction(nameof(this.GetUserAccountDetails), new { accountId = newAccountId }, account);
+            null);
+        var result = await this.mediator.Execute(command, cancellationToken);
+        return result.Match(
+            _ => Results.CreatedAtRoute(GetAccountDetailsRouteName, new { accountId = command.Id.ToGuid() }),
+            error => Results.InternalServerError(error.ErrorMessage));
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.Application;
 
+using HomeBudgetManager.Services.Accounts.Application.Setup;
 using HomeBudgetManager.Services.Accounts.Domain;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -7,13 +8,18 @@ using Microsoft.Extensions.DependencyInjection;
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApplication(
-        this IServiceCollection services)
+        this IServiceCollection services,
+        Func<IConfigurationSetup, IConfigurationSetup.IDone> configure)
     {
         services.AddScoped<IMediator, Mediator>();
         services.AddScoped<ICommandHandlerFactory, ServiceProviderCommandHandlerFactory>();
+        services.AddScoped<IQueryHandlerFactory, ServiceProviderQueryHandlerFactory>();
         services
             .RegisterCommandHandler<Domain.Accounts.CreateAccountCommand, Accounts.CreateAccountCommandHandler>()
             .RegisterQueryHandler<Domain.Accounts.GetAccountDetailsResult?, Accounts.GetAccountDetailsQueryHandler>();
+        var configurationSetup = new ConfigurationSetup();
+        configure(configurationSetup);
+        configurationSetup.RegisterServices(services);
         return services;
     }
 

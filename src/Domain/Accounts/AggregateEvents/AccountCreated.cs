@@ -9,7 +9,7 @@ public record class AccountCreated(
     string Description,
     AccountType AccountType,
     string Currency,
-    ContractorId? OwnerId) : IAggregateEvent
+    ContractorId? OwnerId) : IAggregateEvent, IAggregateCreationEvent
 {
     public Guid AggregateId => this.Id.ToGuid();
 }

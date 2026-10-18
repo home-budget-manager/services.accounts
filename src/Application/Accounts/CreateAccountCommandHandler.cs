@@ -1,22 +1,27 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.Application.Accounts;
 
+using HomeBudgetManager.Services.Accounts.Application.EventSourcing;
 using HomeBudgetManager.Services.Accounts.Domain.Accounts;
 
-public sealed class CreateAccountCommandHandler : CommandHandlerBase<CreateAccountCommand>
+public sealed class CreateAccountCommandHandler(
+    IEventsStorage eventsStorage) : CommandHandlerBase<CreateAccountCommand>
 {
+    private readonly IEventsStorage eventsStorage = eventsStorage;
+
     protected override async Task<OneOf<CommandResults.Success, CommandResults.Failure>> Handle(
         CreateAccountCommand command,
         CancellationToken cancellationToken)
     {
-        await Task.Yield();
+        var accountType = AccountType.FromId(command.AccountTypeId);
         var account = AccountAggregate.Create(
             command.Id,
             command.Name,
             DateTimeOffset.UtcNow,
-            command.AccountType,
+            accountType,
             command.Description,
             command.Currency,
             command.OwnerId);
+        await this.eventsStorage.Store(account.GetUncommittedEvents(), cancellationToken);
         WriteModel.AddAccountEvents(account.GetUncommittedEvents());
         return new CommandResults.Success();
     }

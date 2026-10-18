@@ -3,13 +3,14 @@
 using HomeBudgetManager.Services.Accounts.Domain.Accounts;
 using HomeBudgetManager.Services.Accounts.WebApi.Controllers.UserAccounts;
 
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 public class GetUserAccountDetailsTests : TestsBase
 {
     private Guid accountId;
 
-    private IActionResult result = null!;
+    private IResult result = null!;
 
     [Fact]
     public void WhenUserAccountDetailsAreRequestedThenCorrectAccountDetailsAreReturned()
@@ -46,15 +47,14 @@ public class GetUserAccountDetailsTests : TestsBase
 
     private void ResultIsOkObjectResult()
     {
-        result.ShouldBeOfType<OkObjectResult>();
+        result.ShouldBeOfType<Ok<AccountDetails>>();
     }
 
     private void ResultContentsAreCorrect()
     {
-        var okResult = (OkObjectResult)this.result;
+        var okResult = (Ok<AccountDetails>)this.result;
         okResult.Value.ShouldNotBeNull();
-        okResult.Value!.ShouldBeOfType<AccountDetails>();
-        var accountDetails = (AccountDetails)okResult.Value!;
+        var accountDetails = okResult.Value!;
         accountDetails.AccountId.ShouldBe(this.accountId);
         accountDetails.Name.ShouldBe("Checking Account");
         accountDetails.AccountType.ShouldBe("TEST");

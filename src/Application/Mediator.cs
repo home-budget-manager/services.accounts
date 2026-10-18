@@ -10,7 +10,7 @@ public sealed class Mediator(
 
     private readonly IQueryHandlerFactory queryHandlerFactory = queryHandlerFactory;
 
-    public async Task<OneOf<CommandResults.Success, CommandResults.Failure>> Execute<TCommand>(TCommand command)
+    public async Task<OneOf<CommandResults.Success, CommandResults.Failure>> Execute<TCommand>(TCommand command, CancellationToken cancellationToken)
         where TCommand : class, ICommand
     {
         var commandHandler = commandHandlerFactory.Create<TCommand>();
@@ -19,7 +19,7 @@ public sealed class Mediator(
             return new CommandResults.Failure($"No handler found for command of type '{typeof(TCommand).FullName}'");
         }
 
-        return await commandHandler.Handle(command, CancellationToken.None);
+        return await commandHandler.Handle(command, cancellationToken);
     }
 
     public async Task<TResult> Fetch<TResult>(IQuery<TResult> query, CancellationToken cancellationToken)
