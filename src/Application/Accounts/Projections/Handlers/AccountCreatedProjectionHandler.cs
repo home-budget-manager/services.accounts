@@ -15,10 +15,13 @@ public sealed class AccountCreatedProjectionHandler(
             @event.Id,
             @event.Name,
             @event.CreationDate,
+            @event.CreationDate,
             @event.Description,
             @event.AccountType,
+            0,
             @event.Currency,
-            @event.OwnerId);
+            @event.OwnerId,
+            true);
         await this.accountInfoRepository.InsertAccount(accountInfo, cancellationToken);
     }
 }

@@ -71,14 +71,17 @@ public sealed class AccountInfoRepository(
             Id = accountInfo.Id.ToGuid(),
             Name = accountInfo.Name,
             CreationDate = accountInfo.CreationDate,
+            LastModificationDate = accountInfo.LastModificationDate,
             Description = accountInfo.Description,
             AccountType = new AccountInfoDto.AccountTypeDto
             {
                 Id = (int)accountInfo.AccountType.Id,
                 Name = accountInfo.AccountType.Name,
             },
+            CurrentBalance = accountInfo.CurrentBalance,
             Currency = accountInfo.Currency,
-            OwnerId = accountInfo.OwnerId?.Value
+            OwnerId = accountInfo.OwnerId?.Value,
+            IsActive = accountInfo.IsActive,
         };
     }
 
@@ -88,11 +91,14 @@ public sealed class AccountInfoRepository(
             new AccountId(accountInfoDto.Id),
             accountInfoDto.Name,
             accountInfoDto.CreationDate,
+            accountInfoDto.LastModificationDate,
             accountInfoDto.Description,
             new AccountType(
                 accountInfoDto.AccountType.Id,
                 accountInfoDto.AccountType.Name),
+            accountInfoDto.CurrentBalance,
             accountInfoDto.Currency,
-            accountInfoDto.OwnerId.HasValue ? new ContractorId(accountInfoDto.OwnerId.Value) : null);
+            accountInfoDto.OwnerId.HasValue ? new ContractorId(accountInfoDto.OwnerId.Value) : null,
+            accountInfoDto.IsActive);
     }
 }

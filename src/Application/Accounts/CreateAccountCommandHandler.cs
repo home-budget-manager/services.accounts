@@ -22,7 +22,6 @@ public sealed class CreateAccountCommandHandler(
             command.Currency,
             command.OwnerId);
         await this.eventsStorage.Store(account.GetUncommittedEvents(), cancellationToken);
-        WriteModel.AddAccountEvents(account.GetUncommittedEvents());
         return new CommandResults.Success();
     }
 }

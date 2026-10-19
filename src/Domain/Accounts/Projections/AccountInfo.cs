@@ -6,7 +6,10 @@ public sealed record AccountInfo(
     AccountId Id,
     string Name,
     DateTimeOffset CreationDate,
+    DateTimeOffset LastModificationDate,
     string Description,
     AccountType AccountType,
+    decimal CurrentBalance,
     string Currency,
-    ContractorId? OwnerId);
+    ContractorId? OwnerId,
+    bool IsActive);

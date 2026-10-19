@@ -7,7 +7,7 @@ using HomeBudgetManager.Services.Accounts.Domain.Accounts;
 public sealed class GetAccountDetailsQueryHandler(
     IAccountInfoRepository accountInfoRepository) : QueryHandlerBase<GetAccountDetailsQuery, GetAccountDetailsResult?>
 {
-    private static RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create();
+    private static readonly RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create();
 
     private readonly IAccountInfoRepository accountInfoRepository = accountInfoRepository;
 

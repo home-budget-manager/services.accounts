@@ -17,6 +17,8 @@ public sealed class AccountAggregate : AggregateRootBase
 
     public DateTimeOffset CreationDate { get; private set; }
 
+    public DateTimeOffset LastModificationDate { get; private set; }
+
     public string Description { get; private set; } = string.Empty;
 
     public AccountType AccountType { get; private set; } = default;
@@ -24,6 +26,8 @@ public sealed class AccountAggregate : AggregateRootBase
     public string Currency { get; private set; } = string.Empty;
 
     public ContractorId? OwnerId { get; private set; } = null;
+
+    public bool IsActive { get; private set; }
 
     public static AccountAggregate Create(AccountId id, string name, DateTimeOffset creationDate, AccountType accountType, string description, string currency, ContractorId? ownerId)
     {
@@ -57,9 +61,11 @@ public sealed class AccountAggregate : AggregateRootBase
         this.Id = @event.Id;
         this.Name = @event.Name;
         this.CreationDate = @event.CreationDate;
+        this.LastModificationDate = @event.CreationDate;
         this.AccountType = @event.AccountType;
         this.Description = @event.Description;
         this.Currency = @event.Currency;
         this.OwnerId = @event.OwnerId;
+        this.IsActive = true;
     }
 }
