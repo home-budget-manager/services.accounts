@@ -1,0 +1,46 @@
+name: Publish Test NuGet Packages
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: publish-nuget
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    name: Pack and publish to GitHub Packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Read package version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$(grep -E '^version:' .github/workflows/version | cut -d':' -f2- | xargs)
+          if [ -z "$VERSION" ]; then
+            echo "version is empty in .github/workflows/version"
+            exit 1
+          fi
+          RUN_DATE=$(date -u "+%Y%m%d%H%M%S")
+          echo "package_version=${VERSION}-test-${RUN_DATE}" >> "$GITHUB_OUTPUT"
+
+      - name: Restore dependencies
+        run: dotnet restore Services.Accounts.slnx
+
+      - name: Pack NuGet packages
+        run: dotnet pack Services.Accounts.slnx --configuration Release --no-restore -p:PackageVersion=${{ steps.version.outputs.package_version }} --output ./artifacts
+
+      - name: Publish NuGet packages to GitHub Packages
+        run: dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key "${{ secrets.GITHUB_TOKEN }}" --skip-duplicate

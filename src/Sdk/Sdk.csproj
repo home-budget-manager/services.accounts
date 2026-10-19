@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+		<IsPackable>true</IsPackable>
+		<AssemblyName>HomeBudgetManager.Services.Accounts.Sdk</AssemblyName>
+		<RootNamespace>HomeBudgetManager.Services.Accounts.Sdk</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OneOf" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Using Include="OneOf" />
+	</ItemGroup>
+
+</Project>

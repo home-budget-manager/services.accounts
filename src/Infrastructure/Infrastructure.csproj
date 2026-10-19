@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
 		<AssemblyName>HomeBudgetManager.Services.Accounts.Infrastructure</AssemblyName>
 		<RootNamespace>HomeBudgetManager.Services.Accounts.Infrastructure</RootNamespace>
   </PropertyGroup>

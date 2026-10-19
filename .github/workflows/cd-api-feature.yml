@@ -1,4 +1,4 @@
-name: CD Develop
+name: Publish test container
 
 on:
   push:
@@ -32,7 +32,7 @@ jobs:
             exit 1
           fi
           RUN_DATE=$(date -u "+%Y%m%d%H%M%S")
-          echo "tag=${VERSION}-develop-${RUN_DATE}" >> "$GITHUB_OUTPUT"
+          echo "tag=${VERSION}-test-${RUN_DATE}" >> "$GITHUB_OUTPUT"
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
