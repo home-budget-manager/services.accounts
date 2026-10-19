@@ -3,6 +3,9 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Copy project file and restore dependencies
+COPY ["src/Application/Application.csproj", "./src/Application/"]
+COPY ["src/Domain/Domain.csproj", "./src/Domain/"]
+COPY ["src/Infrastructure/Infrastructure.csproj", "./src/Infrastructure/"]
 COPY ["src/WebApi/WebApi.csproj", "./src/WebApi/"]
 COPY ["tests/WebApi.UnitTests/WebApi.UnitTests.csproj", "./tests/WebApi.UnitTests/"]
 COPY ["Services.Accounts.slnx", "./"]

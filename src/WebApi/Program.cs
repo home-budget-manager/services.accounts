@@ -11,6 +11,7 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 var corsSettings = CorsSettings.LoadSettings(builder.Configuration);
 var kurrentDbSettings = KurrentDbSettings.LoadSettings(builder.Configuration);
+var apiSettings = ApiSettings.LoadSettings(builder.Configuration);
 builder.Services.Configure<KurrentDbSettings>(builder.Configuration.GetSection(KurrentDbSettings.SectionName));
 var mongoSettings = MongoDbSettings.LoadSettings(builder.Configuration);
 
@@ -35,7 +36,7 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (apiSettings.ScalarEnabled)
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
