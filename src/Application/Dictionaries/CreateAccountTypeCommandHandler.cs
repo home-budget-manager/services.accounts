@@ -18,13 +18,10 @@ public sealed class CreateAccountTypeCommandHandler(
             Guid.Empty,
             DictionariesAggregate.CreateFromEvents,
             cancellationToken);
-        if (dictionariesAggregate == null)
-        {
-            dictionariesAggregate = DictionariesAggregate.Create();
-        }
+        dictionariesAggregate ??= DictionariesAggregate.Create();
 
         var newId = 1;
-        if (dictionariesAggregate.AccountTypes.Any())
+        if (dictionariesAggregate.AccountTypes.Count != 0)
         {
             newId = dictionariesAggregate.AccountTypes.Max(at => at.Id) + 1;
         }

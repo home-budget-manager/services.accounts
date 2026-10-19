@@ -14,6 +14,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IMediator, Mediator>();
         services.AddScoped<ICommandHandlerFactory, ServiceProviderCommandHandlerFactory>();
         services.AddScoped<IQueryHandlerFactory, ServiceProviderQueryHandlerFactory>();
+        services.AddScoped<Dictionaries.IDictionariesCache, Dictionaries.DictionariesCache>();
         services
             .RegisterCommandHandler<Domain.Accounts.CreateAccountCommand, Accounts.CreateAccountCommandHandler>()
             .RegisterCommandHandler<Domain.Dictionaries.CreateAccountTypeCommand, Dictionaries.CreateAccountTypeCommandHandler>();
@@ -24,7 +25,10 @@ public static class ServiceCollectionExtensions
             .RegisterQueryHandler<Domain.Dictionaries.FetchAccountTypesResult, Dictionaries.FetchAccountTypesQueryHandler>();
 
         services
-            .RegisterProjectionHandler<Domain.Accounts.AggregateEvents.AccountCreated, Accounts.Projections.Handlers.AccountCreatedProjectionHandler>();
+            .RegisterProjectionHandler<Domain.Accounts.AggregateEvents.AccountCreated, Accounts.Projections.Handlers.AccountCreatedProjectionHandler>()
+            .RegisterProjectionHandler<Domain.Dictionaries.AggregateEvents.DictionariesCreated, Dictionaries.CacheInvalidation.DictionariesCreatedProjectionHandler>()
+            .RegisterProjectionHandler<Domain.Dictionaries.AggregateEvents.AccountTypeAdded, Dictionaries.CacheInvalidation.AccountTypeAddedProjectionHandler>();
+
         var configurationSetup = new ConfigurationSetup();
         configure(configurationSetup);
         configurationSetup.RegisterServices(services);

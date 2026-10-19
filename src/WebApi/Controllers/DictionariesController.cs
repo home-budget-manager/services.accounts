@@ -46,8 +46,6 @@ public class DictionariesController(
         var accountTypes = await this.mediator.Fetch(new FetchAccountTypesQuery(), cancellationToken);
         var created = accountTypes.AccountTypes.FirstOrDefault(at => at.Name == displayName);
         return Results.CreatedAtRoute(
-            GetAccountTypesRouteName,
-            routeValues: null,
-            value: new { id = created.Id });
+            GetAccountTypesRouteName);
     }
 }

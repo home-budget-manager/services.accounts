@@ -27,7 +27,6 @@ public sealed class DictionariesAggregate : AggregateRootBase
         return dictionaries;
     }
 
-
     public static DictionariesAggregate CreateFromEvents(IEnumerable<IAggregateEvent> events)
     {
         var dictionaries = new DictionariesAggregate();
@@ -40,6 +39,11 @@ public sealed class DictionariesAggregate : AggregateRootBase
         if (accountTypes.Any(at => at.Id == id))
         {
             throw new InvalidOperationException($"Account type with ID {id} already exists.");
+        }
+
+        if (accountTypes.Any(at => at.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+        {
+            throw new InvalidOperationException($"Account type with name '{name}' already exists.");
         }
 
         var @event = new AccountTypeAdded(this.AggregateId, id, name);

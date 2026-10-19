@@ -27,6 +27,7 @@ KurrentDbSettings.RegisterConnection(builder.Services, kurrentDbSettings);
 MongoDbSettings.RegisterConnection(builder.Services, mongoSettings);
 MongoDbSettings.RegisterMongoDbProjections(builder.Services, mongoSettings);
 builder.Services.AddApplication(c => c.WithEventsStorage<EventsStorage>());
+builder.Services.AddMemoryCache();
 builder.Services.AddHostedService<ReadModelHydration>();
 
 builder.Services.AddOpenApi();

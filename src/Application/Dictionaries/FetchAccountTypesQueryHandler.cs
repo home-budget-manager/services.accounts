@@ -4,19 +4,15 @@ using HomeBudgetManager.Services.Accounts.Application.EventSourcing;
 using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
 
 public sealed class FetchAccountTypesQueryHandler(
-    IEventsStorage eventsStorage) : QueryHandlerBase<FetchAccountTypesQuery, FetchAccountTypesResult>
+    IDictionariesCache dictionariesCache) : QueryHandlerBase<FetchAccountTypesQuery, FetchAccountTypesResult>
 {
-    private readonly IEventsStorage eventsStorage = eventsStorage;
+    private readonly IDictionariesCache dictionariesCache = dictionariesCache;
 
     protected override async Task<FetchAccountTypesResult> Handle(
         FetchAccountTypesQuery query,
         CancellationToken cancellationToken)
     {
-        var dictionariesAggregate = await this.eventsStorage.Load(
-            typeof(DictionariesAggregate).Name,
-            Guid.Empty,
-            DictionariesAggregate.CreateFromEvents,
-            cancellationToken);
+        var dictionariesAggregate = await this.dictionariesCache.GetDictionaries(cancellationToken);
         if (dictionariesAggregate is null)
         {
             return new([]);
