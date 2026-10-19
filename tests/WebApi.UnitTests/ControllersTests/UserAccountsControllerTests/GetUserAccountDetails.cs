@@ -1,6 +1,7 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.WebApi.UnitTests.ControllersTests.UserAccountsControllerTests;
 
 using HomeBudgetManager.Services.Accounts.Domain.Accounts;
+using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
 using HomeBudgetManager.Services.Accounts.WebApi.Controllers.UserAccounts;
 
 using Microsoft.AspNetCore.Http;

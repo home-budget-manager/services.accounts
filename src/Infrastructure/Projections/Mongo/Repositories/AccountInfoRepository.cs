@@ -3,6 +3,7 @@
 using HomeBudgetManager.Services.Accounts.Domain.Accounts;
 using HomeBudgetManager.Services.Accounts.Domain.Accounts.Projections;
 using HomeBudgetManager.Services.Accounts.Domain.Contractors;
+using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
 
 using Microsoft.Extensions.Logging;
 

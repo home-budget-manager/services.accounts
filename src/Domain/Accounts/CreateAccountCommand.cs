@@ -3,22 +3,22 @@
 using HomeBudgetManager.Services.Accounts.Domain.Contractors;
 
 public sealed class CreateAccountCommand(
-    AccountId Id,
-    string Name,
+    AccountId id,
+    string name,
     int accountTypeId,
-    string Description,
-    string Currency,
-    ContractorId? OwnerId) : ICommand
+    string description,
+    string currency,
+    ContractorId? ownerId) : ICommand
 {
-    public AccountId Id { get; } = Id;
+    public AccountId Id { get; } = id;
 
-    public string Name { get; } = Name;
+    public string Name { get; } = name;
 
     public int AccountTypeId { get; } = accountTypeId;
 
-    public string Description { get; } = Description;
+    public string Description { get; } = description;
 
-    public string Currency { get; } = Currency;
+    public string Currency { get; } = currency;
 
-    public ContractorId? OwnerId { get; } = OwnerId;
+    public ContractorId? OwnerId { get; } = ownerId;
 }

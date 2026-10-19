@@ -15,11 +15,13 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICommandHandlerFactory, ServiceProviderCommandHandlerFactory>();
         services.AddScoped<IQueryHandlerFactory, ServiceProviderQueryHandlerFactory>();
         services
-            .RegisterCommandHandler<Domain.Accounts.CreateAccountCommand, Accounts.CreateAccountCommandHandler>();
+            .RegisterCommandHandler<Domain.Accounts.CreateAccountCommand, Accounts.CreateAccountCommandHandler>()
+            .RegisterCommandHandler<Domain.Dictionaries.CreateAccountTypeCommand, Dictionaries.CreateAccountTypeCommandHandler>();
 
         services
             .RegisterQueryHandler<Domain.Accounts.GetAccountDetailsResult?, Accounts.GetAccountDetailsQueryHandler>()
-            .RegisterQueryHandler<Domain.Accounts.GetAccountsListResult, Accounts.GetAccountsListQueryHandler>();
+            .RegisterQueryHandler<Domain.Accounts.GetAccountsListResult, Accounts.GetAccountsListQueryHandler>()
+            .RegisterQueryHandler<Domain.Dictionaries.FetchAccountTypesResult, Dictionaries.FetchAccountTypesQueryHandler>();
 
         services
             .RegisterProjectionHandler<Domain.Accounts.AggregateEvents.AccountCreated, Accounts.Projections.Handlers.AccountCreatedProjectionHandler>();

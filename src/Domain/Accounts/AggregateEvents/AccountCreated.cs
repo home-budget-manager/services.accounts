@@ -1,6 +1,7 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.Domain.Accounts.AggregateEvents;
 
 using HomeBudgetManager.Services.Accounts.Domain.Contractors;
+using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
 
 public record class AccountCreated(
     AccountId Id,

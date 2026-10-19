@@ -1,6 +1,7 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.Domain.Accounts;
 
 using HomeBudgetManager.Services.Accounts.Domain.Contractors;
+using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
 
 public sealed class GetAccountDetailsResult(
     AccountId id,

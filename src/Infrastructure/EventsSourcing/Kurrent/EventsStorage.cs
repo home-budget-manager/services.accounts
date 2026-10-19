@@ -16,15 +16,27 @@ public sealed class EventsStorage(
 
     private readonly KurrentDBClient client = client;
 
-    public async Task<IReadOnlyCollection<IAggregateEvent>> Retrieve(Guid aggregateId, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<IAggregateEvent>> Retrieve(string aggregateName, Guid aggregateId, CancellationToken cancellationToken)
     {
-        var streamName = aggregateId.ToString();
+        var streamName = $"{aggregateName}_{aggregateId}";
+
         var eventsPromise = client.ReadStreamAsync(
             Direction.Forwards,
             streamName,
             StreamPosition.Start,
             cancellationToken: cancellationToken);
+        var readState = await eventsPromise.ReadState;
+        if (readState == ReadState.StreamNotFound)
+        {
+            return [];
+        }
+
         var events = await eventsPromise.ToListAsync(cancellationToken: cancellationToken);
+        if (events.Count == 0)
+        {
+            return [];
+        }
+
         var result = new IAggregateEvent[events.Count];
         for (var i = 0; i < events.Count; i++)
         {
@@ -37,7 +49,7 @@ public sealed class EventsStorage(
 
             var eventData = @event.OriginalEvent.Data;
             var eventString = System.Text.Encoding.UTF8.GetString(eventData.ToArray());
-            var deserialized = System.Text.Json.JsonSerializer.Deserialize(eventString, eventType);
+            var deserialized = System.Text.Json.JsonSerializer.Deserialize(eventString, eventType, serializerOptions);
             if (deserialized is null)
             {
                 continue;
@@ -50,10 +62,10 @@ public sealed class EventsStorage(
         return result;
     }
 
-    public async Task Store(IEnumerable<IAggregateEvent> events, CancellationToken cancellationToken)
+    public async Task Store(string aggregateName, Guid aggregateId, IEnumerable<IAggregateEvent> events, CancellationToken cancellationToken)
     {
         var mapped = events
-            .Select(ConvertToKurrentEvents);
+            .Select(e => ConvertToKurrentEvents(e, aggregateName, aggregateId));
         foreach (var (streamName, isNewStream, eventData) in mapped)
         {
             var expectedState = isNewStream ? StreamState.NoStream : StreamState.StreamExists;
@@ -65,9 +77,12 @@ public sealed class EventsStorage(
         }
     }
 
-    private static (string StreamName, bool IsNewStream, EventData EventData) ConvertToKurrentEvents(IAggregateEvent @event)
+    private static (string StreamName, bool IsNewStream, EventData EventData) ConvertToKurrentEvents(
+        IAggregateEvent @event,
+        string aggregateName,
+        Guid aggregateId)
     {
-        var streamName = @event.AggregateId.ToString();
+        var streamName = $"{aggregateName}_{aggregateId}";
         var eventType = @event.GetType().AssemblyQualifiedName;
         if (eventType == null)
         {

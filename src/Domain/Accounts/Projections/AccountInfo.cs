@@ -1,6 +1,7 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.Domain.Accounts.Projections;
 
 using HomeBudgetManager.Services.Accounts.Domain.Contractors;
+using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
 
 public sealed record AccountInfo(
     AccountId Id,

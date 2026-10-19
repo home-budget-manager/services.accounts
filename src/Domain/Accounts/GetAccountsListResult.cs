@@ -2,6 +2,8 @@
 
 using System.Collections.ObjectModel;
 
+using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
+
 public sealed class GetAccountsListResult : IResult
 {
     public GetAccountsListResult(IEnumerable<AccountInfo> accounts)

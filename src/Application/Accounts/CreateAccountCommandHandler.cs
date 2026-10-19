@@ -2,6 +2,7 @@
 
 using HomeBudgetManager.Services.Accounts.Application.EventSourcing;
 using HomeBudgetManager.Services.Accounts.Domain.Accounts;
+using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
 
 public sealed class CreateAccountCommandHandler(
     IEventsStorage eventsStorage) : CommandHandlerBase<CreateAccountCommand>
@@ -21,7 +22,7 @@ public sealed class CreateAccountCommandHandler(
             command.Description,
             command.Currency,
             command.OwnerId);
-        await this.eventsStorage.Store(account.GetUncommittedEvents(), cancellationToken);
+        await this.eventsStorage.Store(account.AggregateName, account.AggregateId, account.GetUncommittedEvents(), cancellationToken);
         return new CommandResults.Success();
     }
 }
