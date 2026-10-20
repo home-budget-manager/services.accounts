@@ -6,6 +6,7 @@ WORKDIR /src
 COPY ["src/Application/Application.csproj", "./src/Application/"]
 COPY ["src/Domain/Domain.csproj", "./src/Domain/"]
 COPY ["src/Infrastructure/Infrastructure.csproj", "./src/Infrastructure/"]
+COPY ["src/Sdk/Sdk.csproj", "./src/Sdk/"]
 COPY ["src/WebApi/WebApi.csproj", "./src/WebApi/"]
 COPY ["tests/WebApi.UnitTests/WebApi.UnitTests.csproj", "./tests/WebApi.UnitTests/"]
 COPY ["Services.Accounts.slnx", "./"]

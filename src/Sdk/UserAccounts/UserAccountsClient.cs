@@ -6,7 +6,7 @@ public sealed class UserAccountsClient(
     HttpClient client,
     Func<IRequestBuilder> requestBuilderFactory) : IUserAccountsClient
 {
-    private readonly HttpClient client;
+    private readonly HttpClient client = client;
 
     private readonly Func<IRequestBuilder> requestBuilderFactory = requestBuilderFactory;
 
@@ -30,12 +30,12 @@ public sealed class UserAccountsClient(
         }
         else if ((int)apiResponse.StatusCode >= 400 && (int)apiResponse.StatusCode < 500)
         {
-            var responseContent = await apiResponse.Content.ReadAsStringAsync(cancellationToken);
+            ////var responseContent = await apiResponse.Content.ReadAsStringAsync(cancellationToken);
             return new ResponseWrapper<CreateAccountResponse>(Results.CreateUserError("InvalidInput"));
         }
         else
         {
-            var responseContent = await apiResponse.Content.ReadAsStringAsync(cancellationToken);
+            ////var responseContent = await apiResponse.Content.ReadAsStringAsync(cancellationToken);
             return new ResponseWrapper<CreateAccountResponse>(Results.CreateServerError("ServerError"));
         }
     }

@@ -4,7 +4,7 @@ public sealed class RequestBuilder : IRequestBuilder
 {
     private string route = string.Empty;
 
-    private HttpMethod method;
+    private HttpMethod method = HttpMethod.Get;
 
     private object? body;
 
