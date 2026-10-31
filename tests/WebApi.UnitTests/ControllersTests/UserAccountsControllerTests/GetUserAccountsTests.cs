@@ -2,7 +2,7 @@
 
 using HomeBudgetManager.Services.Accounts.Domain.Accounts;
 using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
-using HomeBudgetManager.Services.Accounts.WebApi.Controllers.UserAccounts;
+using HomeBudgetManager.Services.Accounts.Sdk.UserAccounts.Payloads;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -26,12 +26,12 @@ public class GetUserAccountsTests : TestsBase
     private void UserAccountIsMocked()
     {
         this.MediatorMock.Setup(m => m.Fetch(It.IsAny<GetAccountsListQuery>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new GetAccountsListResult(new[]
-            {
+            .ReturnsAsync(new GetAccountsListResult(
+            [
                 new GetAccountsListResult.AccountInfo(
                     new AccountId(Guid.NewGuid()),
                     "Checking Account",
-                    new AccountType(1, "Checking"),
+                    new(1, "Checking"),
                     1000.00m,
                     50.00m,
                     "USD",
@@ -39,7 +39,7 @@ public class GetUserAccountsTests : TestsBase
                 new GetAccountsListResult.AccountInfo(
                     new AccountId(Guid.NewGuid()),
                     "Savings Account",
-                    new AccountType(2, "Savings"),
+                    new(2, "Savings"),
                     5000.00m,
                     100.00m,
                     "USD",
@@ -47,12 +47,12 @@ public class GetUserAccountsTests : TestsBase
                 new GetAccountsListResult.AccountInfo(
                     new AccountId(Guid.NewGuid()),
                     "Credit Card",
-                    new AccountType(3, "Credit Card"),
+                    new(3, "Credit Card"),
                     -2000.00m,
                     -50.00m,
                     "USD",
                     true)
-            }));
+            ]));
     }
 
     private async Task UserAccountsAreRequested()

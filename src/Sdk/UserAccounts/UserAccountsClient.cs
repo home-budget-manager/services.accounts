@@ -20,7 +20,7 @@ public sealed class UserAccountsClient(
         if (apiResponse.IsSuccessStatusCode)
         {
             var responseContent = await apiResponse.Content.ReadAsStringAsync(cancellationToken);
-            var createAccountOutput = JsonSerializer.Deserialize<Payloads.CreateAccountOutput>(responseContent);
+            var createAccountOutput = JsonSerializer.Deserialize<Payloads.CreateAccountOutput>(responseContent, SerializationOptionsProvider.GetJsonSerializerOptions());
             if (createAccountOutput is null)
             {
                 return new ResponseWrapper<CreateAccountResponse>(Results.CreateServerError("ServerError"));

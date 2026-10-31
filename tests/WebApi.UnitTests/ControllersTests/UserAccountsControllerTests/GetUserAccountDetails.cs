@@ -2,7 +2,7 @@
 
 using HomeBudgetManager.Services.Accounts.Domain.Accounts;
 using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
-using HomeBudgetManager.Services.Accounts.WebApi.Controllers.UserAccounts;
+using HomeBudgetManager.Services.Accounts.Sdk.UserAccounts.Payloads;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -32,7 +32,7 @@ public class GetUserAccountDetailsTests : TestsBase
         var accountDetails = new GetAccountDetailsResult(
             new(this.accountId),
             "Checking Account",
-            new AccountType(1, "TEST"),
+            new(1, "TEST"),
             "This is a checking account.",
             "USD",
             null);

@@ -15,6 +15,7 @@
     <Project Path="src/WebApi/WebApi.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Sdk.UnitTests/Sdk.UnitTests.csproj" Id="f0da15d2-47c6-45e2-90ac-750ddc37eec6" />
     <Project Path="tests/WebApi.UnitTests/WebApi.UnitTests.csproj" />
   </Folder>
 </Solution>

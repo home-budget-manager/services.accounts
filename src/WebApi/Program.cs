@@ -2,7 +2,6 @@ using Google.Api;
 
 using HomeBudgetManager.Services.Accounts.Application;
 using HomeBudgetManager.Services.Accounts.Infrastructure.EventsSourcing.Kurrent;
-using HomeBudgetManager.Services.Accounts.Infrastructure.Projections.Mongo;
 using HomeBudgetManager.Services.Accounts.WebApi.BackgroundServices;
 using HomeBudgetManager.Services.Accounts.WebApi.Settings;
 
@@ -29,6 +28,11 @@ MongoDbSettings.RegisterConnection(builder.Services, mongoSettings);
 MongoDbSettings.RegisterMongoDbProjections(builder.Services, mongoSettings);
 builder.Services.AddApplication(c => c.WithEventsStorage<EventsStorage>());
 builder.Services.AddMemoryCache();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        HomeBudgetManager.Services.Accounts.Sdk.SerializationOptionsProvider.SetJsonSerializerOptions(options.JsonSerializerOptions);
+    });
 builder.Services.AddHostedService<ReadModelHydration>();
 
 builder.Services.AddOpenApi();

@@ -1,7 +1,6 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.WebApi.UnitTests.ControllersTests.UserAccountsTests;
 
-using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
-using HomeBudgetManager.Services.Accounts.WebApi.Controllers.UserAccounts;
+using HomeBudgetManager.Services.Accounts.Sdk.UserAccounts.Payloads;
 
 public class AccountInfoTests
 {
@@ -9,7 +8,7 @@ public class AccountInfoTests
 
     private string name = null!;
 
-    private AccountType accountType = default;
+    private AccountType accountType = null!;
 
     private decimal balance;
 

@@ -1,6 +1,6 @@
-﻿namespace HomeBudgetManager.Services.Accounts.WebApi.Controllers.UserAccounts;
+﻿namespace HomeBudgetManager.Services.Accounts.Sdk.UserAccounts.Payloads;
 
-public class AccountDetails(
+public sealed class AccountDetails(
     Guid accountId,
     string name,
     string accountType,
