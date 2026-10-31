@@ -51,7 +51,7 @@ public sealed class UserAccountsClient(
         if (apiResponse.IsSuccessStatusCode)
         {
             var responseContent = await apiResponse.Content.ReadAsStringAsync(cancellationToken);
-            var getUserAccountsOutput = JsonSerializer.Deserialize<Payloads.GetUserAccountsOutput>(responseContent);
+            var getUserAccountsOutput = JsonSerializer.Deserialize<Payloads.GetUserAccountsOutput>(responseContent, SerializationOptionsProvider.GetJsonSerializerOptions());
             if (getUserAccountsOutput is null)
             {
                 return new ResponseWrapper<GetUserAccountsResponse>(Results.CreateServerError("ServerError"));
