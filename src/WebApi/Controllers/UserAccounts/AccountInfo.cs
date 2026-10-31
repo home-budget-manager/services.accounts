@@ -1,11 +1,13 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.WebApi.Controllers.UserAccounts;
 
+using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
+
 public class AccountInfo
 {
     public AccountInfo(
         Guid accountId,
         string name,
-        string accountType,
+        AccountType accountType,
         decimal balance,
         decimal currentPeriodChange,
         string currency,
@@ -24,7 +26,7 @@ public class AccountInfo
 
     public string Name { get; }
 
-    public string AccountType { get; }
+    public AccountType AccountType { get; }
 
     public decimal Balance { get; }
 

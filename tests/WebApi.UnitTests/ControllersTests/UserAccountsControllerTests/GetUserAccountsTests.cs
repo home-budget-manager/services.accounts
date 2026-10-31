@@ -62,14 +62,14 @@ public class GetUserAccountsTests : TestsBase
 
     private void ResultIsOkObjectResult()
     {
-        result.ShouldBeOfType<Ok<AccountInfo[]>>();
+        result.ShouldBeOfType<Ok<GetUserAccountsOutput>>();
     }
 
     private void ResultContentsAreCorrect()
     {
-        var okResult = (Ok<AccountInfo[]>)this.result;
+        var okResult = (Ok<GetUserAccountsOutput>)this.result;
         okResult.Value.ShouldNotBeNull();
-        var accounts = okResult.Value!;
+        var accounts = okResult.Value!.Accounts;
         accounts.Length.ShouldBe(3);
         accounts[0].Name.ShouldBe("Checking Account");
         accounts[1].Name.ShouldBe("Savings Account");

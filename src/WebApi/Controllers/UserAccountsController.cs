@@ -27,13 +27,13 @@ public class UserAccountsController(
         var output = result.Accounts.Select(account => new AccountInfo(
             account.Id.ToGuid(),
             account.Name,
-            account.AccountType.Name,
+            new(account.AccountType.Id, account.AccountType.Name),
             account.Balance,
             account.CurrentPeriodChange,
             account.Currency,
             true)).ToArray();
 
-        return Results.Ok(output);
+        return Results.Ok(new GetUserAccountsOutput(output));
     }
 
     [HttpGet("{accountId:guid}", Name = GetAccountDetailsRouteName)]

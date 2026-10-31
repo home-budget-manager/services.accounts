@@ -1,5 +1,6 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.WebApi.UnitTests.ControllersTests.UserAccountsTests;
 
+using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
 using HomeBudgetManager.Services.Accounts.WebApi.Controllers.UserAccounts;
 
 public class AccountInfoTests
@@ -8,7 +9,7 @@ public class AccountInfoTests
 
     private string name = null!;
 
-    private string accountType = null!;
+    private AccountType accountType = default;
 
     private decimal balance;
 
@@ -25,7 +26,7 @@ public class AccountInfoTests
     {
         this.Given(t => t.AccountIdIs(Guid.NewGuid()))
             .And(t => t.NameIs("Checking Account"))
-            .And(t => t.AccountTypeIs("Checking"))
+            .And(t => t.AccountTypeIs(423, "Checking"))
             .And(t => t.BalanceIs(1000.00m))
             .And(t => t.CurrentPeriodChangeIs(50.00m))
             .And(t => t.CurrencyIs("USD"))
@@ -39,7 +40,7 @@ public class AccountInfoTests
 
     private void NameIs(string value) => this.name = value;
 
-    private void AccountTypeIs(string value) => this.accountType = value;
+    private void AccountTypeIs(int id, string value) => this.accountType = new AccountType(id, value);
 
     private void BalanceIs(decimal value) => this.balance = value;
 
