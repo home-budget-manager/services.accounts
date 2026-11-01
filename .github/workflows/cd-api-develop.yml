@@ -30,7 +30,7 @@ jobs:
             echo "version is empty in .github/workflows/version"
             exit 1
           fi
-          RUN_DATE=$(date -u "+%Y%m%d%H%M%S")
+          RUN_DATE=$(date -u "+%Y%m%d-%H%M")
           echo "tag=${VERSION}-develop-${RUN_DATE}" >> "$GITHUB_OUTPUT"
 
       - name: Log in to GitHub Container Registry

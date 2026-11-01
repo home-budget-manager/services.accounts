@@ -35,7 +35,7 @@ jobs:
             echo "version is empty in .github/workflows/version"
             exit 1
           fi
-          RUN_DATE=$(date -u "+%Y%m%d%H%M%S")
+          RUN_DATE=$(date -u "+%Y%m%d-%H%M")
           echo "package_version=${VERSION}-develop-${RUN_DATE}" >> "$GITHUB_OUTPUT"
 
       - name: Restore dependencies

@@ -1,9 +1,6 @@
 name: Publish test container
 
 on:
-  push:
-    branches:
-      - develop
   workflow_dispatch:
 
 concurrency:
@@ -31,7 +28,7 @@ jobs:
             echo "version is empty in .github/workflows/version"
             exit 1
           fi
-          RUN_DATE=$(date -u "+%Y%m%d%H%M%S")
+          RUN_DATE=$(date -u "+%Y%m%d-%H%M")
           echo "tag=${VERSION}-test-${RUN_DATE}" >> "$GITHUB_OUTPUT"
 
       - name: Log in to GitHub Container Registry
@@ -49,4 +46,3 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.tag }}
-            ghcr.io/${{ github.repository }}:develop
