@@ -68,7 +68,7 @@ public class UserAccountsController(
             null);
         var result = await this.mediator.Execute(command, cancellationToken);
         return result.Match(
-            _ => Results.CreatedAtRoute(GetAccountDetailsRouteName, new { accountId = command.Id.ToGuid() }),
+            _ => Results.CreatedAtRoute(GetAccountDetailsRouteName, new { accountId = command.Id.ToGuid() }, new CreateAccountOutput { AccountId = command.Id.ToGuid() }),
             error => Results.InternalServerError(error.ErrorMessage));
     }
 }
