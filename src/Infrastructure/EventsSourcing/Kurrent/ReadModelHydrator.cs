@@ -26,9 +26,9 @@ public sealed class ReadModelHydrator(
             {
                 Task action = message switch
                 {
-                    PersistentSubscriptionMessage.SubscriptionConfirmation e => this.HandleSubscriptionConfirmation(subscription, e),
+                    PersistentSubscriptionMessage.SubscriptionConfirmation e => HandleSubscriptionConfirmation(subscription, e),
                     PersistentSubscriptionMessage.Event e => this.HandleEvent(subscription, e),
-                    _ => this.HandleUnknownEvent(subscription, message),
+                    _ => HandleUnknownEvent(subscription, message),
                 };
 
                 await action;
@@ -37,22 +37,22 @@ public sealed class ReadModelHydrator(
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             throw;
         }
     }
 
-    private async Task HandleSubscriptionConfirmation(
+    private async static Task HandleSubscriptionConfirmation(
         KurrentDBPersistentSubscriptionsClient.PersistentSubscriptionResult _,
-        PersistentSubscriptionMessage.SubscriptionConfirmation confirmation)
+        PersistentSubscriptionMessage.SubscriptionConfirmation __)
     {
         await Task.Yield();
     }
 
-    private async Task HandleUnknownEvent(
+    private async static Task HandleUnknownEvent(
         KurrentDBPersistentSubscriptionsClient.PersistentSubscriptionResult _,
-        PersistentSubscriptionMessage message)
+        PersistentSubscriptionMessage __)
     {
         await Task.Yield();
     }
@@ -75,7 +75,7 @@ public sealed class ReadModelHydrator(
 
             await subscription.Ack([resolvedEvent]);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await subscription.Nack(
                 PersistentSubscriptionNakEventAction.Park,
@@ -84,7 +84,7 @@ public sealed class ReadModelHydrator(
         }
     }
 
-    private async Task FeedProjections(string streamId, IAggregateEvent aggregateEvent, CancellationToken cancellationToken)
+    private async Task FeedProjections(string _, IAggregateEvent aggregateEvent, CancellationToken cancellationToken)
     {
         var workers = projectionHandlerFactory.Create(aggregateEvent)
             .ToList();
@@ -93,7 +93,7 @@ public sealed class ReadModelHydrator(
         await Task.WhenAll(work);
     }
 
-    private async Task<IAggregateEvent?> GetEvent(
+    private async static Task<IAggregateEvent?> GetEvent(
         ResolvedEvent resolvedEvent)
     {
         var eventType = Type.GetType(resolvedEvent.Event.EventType);
