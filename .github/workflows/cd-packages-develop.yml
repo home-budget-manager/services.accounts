@@ -6,7 +6,7 @@ on:
       - develop
 
 concurrency:
-  group: publish-nuget
+  group: publish-nuget-develop
   cancel-in-progress: true
 
 jobs:

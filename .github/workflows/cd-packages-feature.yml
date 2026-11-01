@@ -3,10 +3,6 @@ name: Publish test NuGet Packages
 on:
   workflow_dispatch:
 
-concurrency:
-  group: publish-nuget
-  cancel-in-progress: true
-
 jobs:
   publish:
     name: Pack and publish to GitHub Packages
