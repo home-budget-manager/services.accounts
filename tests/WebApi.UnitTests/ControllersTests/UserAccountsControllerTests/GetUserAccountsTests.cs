@@ -1,39 +1,72 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.WebApi.UnitTests.ControllersTests.UserAccountsControllerTests;
 
-using HomeBudgetManager.Services.Accounts.WebApi.Controllers.UserAccounts;
+using HomeBudgetManager.Services.Accounts.Domain.Accounts;
+using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
+using HomeBudgetManager.Services.Accounts.Sdk.UserAccounts.Payloads;
 
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 public class GetUserAccountsTests : TestsBase
 {
-    private IActionResult result = null!;
+    private IResult result = null!;
 
     [Fact]
     public void WhenUserAccountsAreRequestedThenCorrectAccountsAreReturned()
     {
         this.Given(t => t.InstanceIsCreated())
+            .And(t => t.UserAccountIsMocked())
             .When(t => t.UserAccountsAreRequested())
             .Then(t => t.ResultIsOkObjectResult())
             .And(t => t.ResultContentsAreCorrect())
             .BDDfy();
     }
 
-    private void UserAccountsAreRequested()
+    private void UserAccountIsMocked()
     {
-        this.result = this.Instance.GetUserAccounts();
+        this.MediatorMock.Setup(m => m.Fetch(It.IsAny<GetAccountsListQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetAccountsListResult(
+            [
+                new GetAccountsListResult.AccountInfo(
+                    new AccountId(Guid.NewGuid()),
+                    "Checking Account",
+                    new(1, "Checking"),
+                    1000.00m,
+                    "USD",
+                    true),
+                new GetAccountsListResult.AccountInfo(
+                    new AccountId(Guid.NewGuid()),
+                    "Savings Account",
+                    new(2, "Savings"),
+                    5000.00m,
+                    "USD",
+                    true),
+                new GetAccountsListResult.AccountInfo(
+                    new AccountId(Guid.NewGuid()),
+                    "Credit Card",
+                    new(3, "Credit Card"),
+                    -2000.00m,
+                    "USD",
+                    true)
+            ]));
+    }
+
+    private async Task UserAccountsAreRequested()
+    {
+        this.result = await this.Instance.GetUserAccounts(CancellationToken.None);
     }
 
     private void ResultIsOkObjectResult()
     {
-        result.ShouldBeOfType<OkObjectResult>();
+        result.ShouldBeOfType<Ok<GetUserAccountsOutput>>();
     }
 
     private void ResultContentsAreCorrect()
     {
-        var okResult = (OkObjectResult)this.result;
+        var okResult = (Ok<GetUserAccountsOutput>)this.result;
         okResult.Value.ShouldNotBeNull();
-        okResult.Value!.ShouldBeOfType<AccountInfo[]>();
-        var accounts = (AccountInfo[])okResult.Value!;
+        var accounts = okResult.Value!.Accounts;
         accounts.Length.ShouldBe(3);
         accounts[0].Name.ShouldBe("Checking Account");
         accounts[1].Name.ShouldBe("Savings Account");

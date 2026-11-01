@@ -1,6 +1,6 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.WebApi.UnitTests.ControllersTests.UserAccountsTests;
 
-using HomeBudgetManager.Services.Accounts.WebApi.Controllers.UserAccounts;
+using HomeBudgetManager.Services.Accounts.Sdk.UserAccounts.Payloads;
 
 public class AccountInfoTests
 {
@@ -8,11 +8,9 @@ public class AccountInfoTests
 
     private string name = null!;
 
-    private string accountType = null!;
+    private AccountType accountType = null!;
 
     private decimal balance;
-
-    private decimal currentPeriodChange;
 
     private string currency = null!;
 
@@ -25,9 +23,8 @@ public class AccountInfoTests
     {
         this.Given(t => t.AccountIdIs(Guid.NewGuid()))
             .And(t => t.NameIs("Checking Account"))
-            .And(t => t.AccountTypeIs("Checking"))
+            .And(t => t.AccountTypeIs(423, "Checking"))
             .And(t => t.BalanceIs(1000.00m))
-            .And(t => t.CurrentPeriodChangeIs(50.00m))
             .And(t => t.CurrencyIs("USD"))
             .And(t => t.IsActiveIs(true))
             .When(t => t.AccountInfoIsCreated())
@@ -39,11 +36,9 @@ public class AccountInfoTests
 
     private void NameIs(string value) => this.name = value;
 
-    private void AccountTypeIs(string value) => this.accountType = value;
+    private void AccountTypeIs(int id, string value) => this.accountType = new AccountType(id, value);
 
     private void BalanceIs(decimal value) => this.balance = value;
-
-    private void CurrentPeriodChangeIs(decimal value) => this.currentPeriodChange = value;
 
     private void CurrencyIs(string value) => this.currency = value;
 
@@ -56,7 +51,6 @@ public class AccountInfoTests
             this.name,
             this.accountType,
             this.balance,
-            this.currentPeriodChange,
             this.currency,
             this.isActive);
     }
@@ -67,7 +61,6 @@ public class AccountInfoTests
         this.accountInfo.Name.ShouldBe(this.name);
         this.accountInfo.AccountType.ShouldBe(this.accountType);
         this.accountInfo.Balance.ShouldBe(this.balance);
-        this.accountInfo.CurrentPeriodChange.ShouldBe(this.currentPeriodChange);
         this.accountInfo.Currency.ShouldBe(this.currency);
         this.accountInfo.IsActive.ShouldBe(this.isActive);
     }

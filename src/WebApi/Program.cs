@@ -1,7 +1,18 @@
-using Microsoft.AspNetCore.Cors.Infrastructure;
+using Google.Api;
+
+using HomeBudgetManager.Services.Accounts.Application;
+using HomeBudgetManager.Services.Accounts.Infrastructure.EventsSourcing.Kurrent;
+using HomeBudgetManager.Services.Accounts.WebApi.BackgroundServices;
+using HomeBudgetManager.Services.Accounts.WebApi.Settings;
+
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
-var corsSettings = builder.Configuration.GetSection(CorsSettings.SectionName).Get<CorsSettings>() ?? new();
+var corsSettings = CorsSettings.LoadSettings(builder.Configuration);
+var kurrentDbSettings = KurrentDbSettings.LoadSettings(builder.Configuration);
+var apiSettings = ApiSettings.LoadSettings(builder.Configuration);
+builder.Services.Configure<KurrentDbSettings>(builder.Configuration.GetSection(KurrentDbSettings.SectionName));
+var mongoSettings = MongoDbSettings.LoadSettings(builder.Configuration);
 
 // Add services to the container.
 
@@ -10,20 +21,29 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policyBuilder =>
-    {
-        Configure(policyBuilder, corsSettings.AllowedOrigins, static builder => builder.AllowAnyOrigin(), static (builder, values) => builder.WithOrigins(values));
-        Configure(policyBuilder, corsSettings.AllowedMethods, static builder => builder.AllowAnyMethod(), static (builder, values) => builder.WithMethods(values));
-        Configure(policyBuilder, corsSettings.AllowedHeaders, static builder => builder.AllowAnyHeader(), static (builder, values) => builder.WithHeaders(values));
-    });
+    CorsSettings.SetupCors(options, corsSettings);
 });
+KurrentDbSettings.RegisterConnection(builder.Services, kurrentDbSettings);
+MongoDbSettings.RegisterConnection(builder.Services, mongoSettings);
+MongoDbSettings.RegisterMongoDbProjections(builder.Services, mongoSettings);
+builder.Services.AddApplication(c => c.WithEventsStorage<EventsStorage>());
+builder.Services.AddMemoryCache();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        HomeBudgetManager.Services.Accounts.Sdk.SerializationOptionsProvider.SetJsonSerializerOptions(options.JsonSerializerOptions);
+    });
+builder.Services.AddHostedService<ReadModelHydration>();
+
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (apiSettings.ScalarEnabled)
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseCors();
@@ -32,29 +52,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-static void Configure(
-    CorsPolicyBuilder policyBuilder,
-    string[] values,
-    Action<CorsPolicyBuilder> allowAny,
-    Action<CorsPolicyBuilder, string[]> allowConfigured)
-{
-    if (values.Length == 0 || values.Contains("*", StringComparer.Ordinal))
-    {
-        allowAny(policyBuilder);
-        return;
-    }
-
-    allowConfigured(policyBuilder, values);
-}
-
-sealed class CorsSettings
-{
-    public const string SectionName = "Cors";
-
-    public string[] AllowedOrigins { get; init; } = ["*"];
-
-    public string[] AllowedMethods { get; init; } = ["*"];
-
-    public string[] AllowedHeaders { get; init; } = ["*"];
-}

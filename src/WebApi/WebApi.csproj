@@ -4,12 +4,20 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+		<IsPackable>false</IsPackable>
 		<AssemblyName>HomeBudgetManager.Services.Accounts.WebApi</AssemblyName>
 		<RootNamespace>HomeBudgetManager.Services.Accounts.WebApi</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Scalar.AspNetCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Sdk\Sdk.csproj" />
   </ItemGroup>
 
 </Project>

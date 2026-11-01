@@ -1,41 +1,74 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.WebApi.Controllers;
 
-using HomeBudgetManager.Services.Accounts.WebApi.Controllers.UserAccounts;
+using HomeBudgetManager.Services.Accounts.Application;
+using HomeBudgetManager.Services.Accounts.Domain.Accounts;
+using HomeBudgetManager.Services.Accounts.Sdk.UserAccounts.Payloads;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
 [ApiController]
 
-public class UserAccountsController : ControllerBase
+public class UserAccountsController(
+    IMediator mediator) : ControllerBase
 {
-    [HttpGet]
-    public IActionResult GetUserAccounts()
-    {
-        var result = new AccountInfo[]
-        {
-            new(Guid.NewGuid(), "Checking Account", "Checking", 1000.00m, 50.00m, "USD", true),
-            new(Guid.NewGuid(), "Savings Account", "Savings", 5000.00m, 100.00m, "USD", true),
-            new(Guid.NewGuid(), "Credit Card", "CreditCard", -200.00m, -20.00m, "USD", false),
-        };
+    private const string GetAccountDetailsRouteName = "GetUserAccountDetails";
 
-        return this.Ok(result);
+    private readonly IMediator mediator = mediator;
+
+    [HttpGet]
+    public async Task<IResult> GetUserAccounts(CancellationToken cancellationToken)
+    {
+        var query = new GetAccountsListQuery();
+        var result = await this.mediator.Fetch(query, cancellationToken);
+        var output = result.Accounts.Select(account => new AccountInfo(
+            account.Id.ToGuid(),
+            account.Name,
+            new(account.AccountType.Id, account.AccountType.Name),
+            account.Balance,
+            account.Currency,
+            true)).ToArray();
+
+        return Results.Ok(new GetUserAccountsOutput(output));
     }
 
-    [HttpGet("{accountId}")]
-    public IActionResult GetUserAccountDetails(Guid accountId)
+    [HttpGet("{accountId:guid}", Name = GetAccountDetailsRouteName)]
+    public async Task<IResult> GetUserAccountDetails(Guid accountId, CancellationToken cancellationToken)
     {
-        var result = new AccountDetails(
-            accountId,
-            "Checking Account",
-            "Checking",
-            DateTimeOffset.UtcNow,
-            "This is a checking account.",
-            1000.00m,
-            50.00m,
-            "USD",
-            true);
+        var query = new GetAccountDetailsQuery(new AccountId(accountId));
+        var result = await this.mediator.Fetch(query, cancellationToken);
+        if (result is null)
+        {
+            return Results.NotFound();
+        }
 
-        return this.Ok(result);
+        var output = new AccountDetails(
+            result.Id.ToGuid(),
+            result.Name,
+            result.AccountType.Name,
+            result.CreationDate,
+            result.Description,
+            result.CurrentBalance,
+            result.Currency,
+            result.IsActive);
+
+        return Results.Ok(output);
+    }
+
+    [HttpPost]
+    public async Task<IResult> CreateUserAccount([FromBody] NewAccountData input, CancellationToken cancellationToken)
+    {
+        var command = new CreateAccountCommand(
+            AccountId.New(),
+            input.Name,
+            input.AccountTypeId,
+            input.Description,
+            input.Currency,
+            null);
+        var result = await this.mediator.Execute(command, cancellationToken);
+        return result.Match(
+            _ => Results.CreatedAtRoute(GetAccountDetailsRouteName, new { accountId = command.Id.ToGuid() }, new CreateAccountOutput { AccountId = command.Id.ToGuid() }),
+            error => Results.InternalServerError(error.ErrorMessage));
     }
 }
