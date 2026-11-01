@@ -1,8 +1,14 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.Domain.Contractors;
 
-public readonly struct ContractorId(Guid value)
+public readonly struct ContractorId
 {
-    public Guid Value { get; } = value;
+    [System.Text.Json.Serialization.JsonConstructor]
+    public ContractorId(Guid value)
+    {
+        this.Value = value;
+    }
+
+    public Guid Value { get; }
 
     public static ContractorId Empty => new(Guid.Empty);
 
