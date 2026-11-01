@@ -27,7 +27,6 @@ public class GetUserAccountsOutputTests
                     "Account 1",
                     new(1, "Account Type 1"),
                     100.00m,
-                    10.00m,
                     "USD",
                     true),
                 new(
@@ -35,7 +34,6 @@ public class GetUserAccountsOutputTests
                     "Account 2",
                     new(2, "Account Type 2"),
                     200.00m,
-                    -20.00m,
                     "EUR",
                     false)
             ]);
@@ -60,7 +58,6 @@ public class GetUserAccountsOutputTests
                 account.Name,
                 new(account.AccountType.Id, account.AccountType.Name),
                 account.Balance,
-                account.CurrentPeriodChange,
                 account.Currency,
                 account.IsActive))
             .ToArray());

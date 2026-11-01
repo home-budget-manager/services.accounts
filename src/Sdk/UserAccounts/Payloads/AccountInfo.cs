@@ -5,7 +5,6 @@ public sealed class AccountInfo(
     string name,
     AccountType accountType,
     decimal balance,
-    decimal currentPeriodChange,
     string currency,
     bool isActive)
 {
@@ -16,8 +15,6 @@ public sealed class AccountInfo(
     public AccountType AccountType { get; } = accountType;
 
     public decimal Balance { get; } = balance;
-
-    public decimal CurrentPeriodChange { get; } = currentPeriodChange;
 
     public string Currency { get; } = currency;
 

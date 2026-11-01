@@ -33,7 +33,6 @@ public class GetUserAccountsTests : TestsBase
                     "Checking Account",
                     new(1, "Checking"),
                     1000.00m,
-                    50.00m,
                     "USD",
                     true),
                 new GetAccountsListResult.AccountInfo(
@@ -41,7 +40,6 @@ public class GetUserAccountsTests : TestsBase
                     "Savings Account",
                     new(2, "Savings"),
                     5000.00m,
-                    100.00m,
                     "USD",
                     true),
                 new GetAccountsListResult.AccountInfo(
@@ -49,7 +47,6 @@ public class GetUserAccountsTests : TestsBase
                     "Credit Card",
                     new(3, "Credit Card"),
                     -2000.00m,
-                    -50.00m,
                     "USD",
                     true)
             ]));

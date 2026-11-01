@@ -12,8 +12,6 @@ public class AccountInfoTests
 
     private decimal balance;
 
-    private decimal currentPeriodChange;
-
     private string currency = null!;
 
     private bool isActive;
@@ -27,7 +25,6 @@ public class AccountInfoTests
             .And(t => t.NameIs("Checking Account"))
             .And(t => t.AccountTypeIs(423, "Checking"))
             .And(t => t.BalanceIs(1000.00m))
-            .And(t => t.CurrentPeriodChangeIs(50.00m))
             .And(t => t.CurrencyIs("USD"))
             .And(t => t.IsActiveIs(true))
             .When(t => t.AccountInfoIsCreated())
@@ -43,8 +40,6 @@ public class AccountInfoTests
 
     private void BalanceIs(decimal value) => this.balance = value;
 
-    private void CurrentPeriodChangeIs(decimal value) => this.currentPeriodChange = value;
-
     private void CurrencyIs(string value) => this.currency = value;
 
     private void IsActiveIs(bool value) => this.isActive = value;
@@ -56,7 +51,6 @@ public class AccountInfoTests
             this.name,
             this.accountType,
             this.balance,
-            this.currentPeriodChange,
             this.currency,
             this.isActive);
     }
@@ -67,7 +61,6 @@ public class AccountInfoTests
         this.accountInfo.Name.ShouldBe(this.name);
         this.accountInfo.AccountType.ShouldBe(this.accountType);
         this.accountInfo.Balance.ShouldBe(this.balance);
-        this.accountInfo.CurrentPeriodChange.ShouldBe(this.currentPeriodChange);
         this.accountInfo.Currency.ShouldBe(this.currency);
         this.accountInfo.IsActive.ShouldBe(this.isActive);
     }

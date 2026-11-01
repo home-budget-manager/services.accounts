@@ -27,7 +27,6 @@ public class UserAccountsController(
             account.Name,
             new(account.AccountType.Id, account.AccountType.Name),
             account.Balance,
-            account.CurrentPeriodChange,
             account.Currency,
             true)).ToArray();
 

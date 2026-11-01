@@ -4,46 +4,29 @@ using System.Collections.ObjectModel;
 
 using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
 
-public sealed class GetAccountsListResult : IResult
+public sealed class GetAccountsListResult(
+    IEnumerable<GetAccountsListResult.AccountInfo> accounts) : IResult
 {
-    public GetAccountsListResult(IEnumerable<AccountInfo> accounts)
+    public ReadOnlyCollection<AccountInfo> Accounts { get; } = new ReadOnlyCollection<AccountInfo>([.. accounts]);
+
+    public sealed class AccountInfo(
+        AccountId id,
+        string name,
+        AccountType accountType,
+        decimal balance,
+        string currency,
+        bool isActive)
     {
-        this.Accounts = new ReadOnlyCollection<AccountInfo>([.. accounts]);
-    }
+        public AccountId Id { get; } = id;
 
-    public ReadOnlyCollection<AccountInfo> Accounts { get; }
+        public string Name { get; } = name;
 
-    public sealed class AccountInfo
-    {
-        public AccountInfo(
-            AccountId id,
-            string name,
-            AccountType accountType,
-            decimal balance,
-            decimal currentPeriodChange,
-            string currency,
-            bool isActive)
-        {
-            this.Id = id;
-            this.Name = name;
-            this.AccountType = accountType;
-            this.Balance = balance;
-            this.CurrentPeriodChange = currentPeriodChange;
-            this.Currency = currency;
-            this.IsActive = isActive;
-        }
-        public AccountId Id { get; }
+        public AccountType AccountType { get; } = accountType;
 
-        public string Name { get; }
+        public decimal Balance { get; } = balance;
 
-        public AccountType AccountType { get; }
+        public string Currency { get; } = currency;
 
-        public decimal Balance { get; }
-
-        public decimal CurrentPeriodChange { get; }
-
-        public string Currency { get; }
-
-        public bool IsActive { get; }
+        public bool IsActive { get; } = isActive;
     }
 }
