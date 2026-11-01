@@ -2,7 +2,7 @@
 
 public record class ContractorCreated(
     ContractorId Id,
-    string Name) : IAggregateEvent
+    string Name) : IAggregateEvent, IAggregateCreationEvent
 {
     public Guid AggregateId => this.Id.ToGuid();
 }
