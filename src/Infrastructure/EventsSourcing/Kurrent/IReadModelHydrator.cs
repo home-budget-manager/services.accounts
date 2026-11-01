@@ -2,5 +2,5 @@
 
 public interface IReadModelHydrator
 {
-    Task Subscribe(CancellationToken cancellationToken);
+    Task Subscribe(string subscriptionName, CancellationToken cancellationToken);
 }

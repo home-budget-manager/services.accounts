@@ -15,10 +15,10 @@ public sealed class ReadModelHydrator(
     KurrentDBPersistentSubscriptionsClient client,
     IProjectionHandlerFactory projectionHandlerFactory) : IReadModelHydrator
 {
-    public async Task Subscribe(CancellationToken cancellationToken)
+    public async Task Subscribe(string subscriptionName, CancellationToken cancellationToken)
     {
         await using var subscription = client.SubscribeToAll(
-            "read-model-hydrator-subscription",
+            subscriptionName,
             cancellationToken: cancellationToken);
         try
         {
