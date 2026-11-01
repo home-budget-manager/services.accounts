@@ -48,12 +48,11 @@ public class UserAccountsController(
             result.Id.ToGuid(),
             result.Name,
             result.AccountType.Name,
-            DateTimeOffset.UtcNow,
+            result.CreationDate,
             result.Description,
-            1000.00m,
-            50.00m,
+            result.CurrentBalance,
             result.Currency,
-            true);
+            result.IsActive);
 
         return Results.Ok(output);
     }

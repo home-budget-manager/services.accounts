@@ -7,7 +7,6 @@ public sealed class AccountDetails(
     DateTimeOffset creationDate,
     string description,
     decimal balance,
-    decimal currentPeriodChange,
     string currency,
     bool isActive)
 {
@@ -22,8 +21,6 @@ public sealed class AccountDetails(
     public string Description { get; } = description;
 
     public decimal Balance { get; } = balance;
-
-    public decimal CurrentPeriodChange { get; } = currentPeriodChange;
 
     public string Currency { get; } = currency;
 

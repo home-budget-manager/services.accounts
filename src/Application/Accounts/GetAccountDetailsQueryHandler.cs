@@ -26,8 +26,11 @@ public sealed class GetAccountDetailsQueryHandler(
             account.Id,
             account.Name,
             account.AccountType,
+            account.CreationDate,
             account.Description,
             account.Currency,
-            account.OwnerId);
+            account.CurrentBalance,
+            account.OwnerId,
+            account.IsActive);
     }
 }

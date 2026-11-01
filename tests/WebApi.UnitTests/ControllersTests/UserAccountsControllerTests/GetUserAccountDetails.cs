@@ -33,9 +33,12 @@ public class GetUserAccountDetailsTests : TestsBase
             new(this.accountId),
             "Checking Account",
             new(1, "TEST"),
+            DateTimeOffset.UtcNow,
             "This is a checking account.",
             "USD",
-            null);
+            1000.00m,
+            null,
+            true);
         this.MediatorMock
             .Setup(m => m.Fetch(It.Is<GetAccountDetailsQuery>(q => q.Id.ToGuid() == this.accountId), It.IsAny<CancellationToken>()))
             .ReturnsAsync(accountDetails);
@@ -61,7 +64,6 @@ public class GetUserAccountDetailsTests : TestsBase
         accountDetails.AccountType.ShouldBe("TEST");
         accountDetails.Description.ShouldBe("This is a checking account.");
         accountDetails.Balance.ShouldBe(1000.00m);
-        accountDetails.CurrentPeriodChange.ShouldBe(50.00m);
         accountDetails.Currency.ShouldBe("USD");
         accountDetails.IsActive.ShouldBe(true);
     }
