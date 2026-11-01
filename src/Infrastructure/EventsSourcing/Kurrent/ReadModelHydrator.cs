@@ -78,7 +78,7 @@ public sealed class ReadModelHydrator(
         catch (Exception)
         {
             await subscription.Nack(
-                PersistentSubscriptionNakEventAction.Park,
+                PersistentSubscriptionNakEventAction.Retry,
                 "Error handling event",
                 [resolvedEvent]);
         }
