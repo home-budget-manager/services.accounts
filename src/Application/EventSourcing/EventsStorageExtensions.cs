@@ -12,7 +12,7 @@ public static class EventsStorageExtensions
         var events = aggregateRoot.GetUncommittedEvents();
         var aggregateName = aggregateRoot.AggregateName;
         var aggregateId = aggregateRoot.AggregateId;
-        await eventsStorage.Store(aggregateName, aggregateId, events, cancellationToken);
+        await eventsStorage.Store(aggregateName, aggregateId, events, aggregateRoot.Version, cancellationToken);
     }
 
     public static async Task<TAggregate?> Load<TAggregate>(

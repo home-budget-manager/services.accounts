@@ -6,5 +6,7 @@ public interface IAggregateRoot
 
     string AggregateName { get; }
 
+    long Version { get; }
+
     IEnumerable<IAggregateEvent> GetUncommittedEvents();
 }

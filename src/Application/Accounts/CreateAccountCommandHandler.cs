@@ -30,7 +30,7 @@ public sealed class CreateAccountCommandHandler(
             command.Description,
             command.Currency,
             command.OwnerId);
-        await this.eventsStorage.Store(account.AggregateName, account.AggregateId, account.GetUncommittedEvents(), cancellationToken);
+        await this.eventsStorage.Store(account, cancellationToken);
         return new CommandResults.Success();
     }
 

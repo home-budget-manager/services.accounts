@@ -62,18 +62,35 @@ public sealed class EventsStorage(
         return result;
     }
 
-    public async Task Store(string aggregateName, Guid aggregateId, IEnumerable<IAggregateEvent> events, CancellationToken cancellationToken)
+    public async Task Store(string aggregateName, Guid aggregateId, IEnumerable<IAggregateEvent> events, long expectedVersion, CancellationToken cancellationToken)
     {
         var mapped = events
             .Select(e => ConvertToKurrentEvents(e, aggregateName, aggregateId));
         foreach (var (streamName, isNewStream, eventData) in mapped)
         {
-            var expectedState = isNewStream ? StreamState.NoStream : StreamState.StreamExists;
-            await client.AppendToStreamAsync(
-                streamName,
-                expectedState,
-                [eventData],
-                cancellationToken: cancellationToken);
+            if (expectedVersion == 0)
+            {
+                if (!isNewStream)
+                {
+                    throw new InvalidOperationException($"Stream '{streamName}' was not loaded before appending.");
+                }
+
+                await client.AppendToStreamAsync(
+                    streamName,
+                    StreamState.NoStream,
+                    [eventData],
+                    cancellationToken: cancellationToken);
+            }
+            else
+            {
+                await client.AppendToStreamAsync(
+                    streamName,
+                    StreamState.StreamRevision((ulong)(expectedVersion - 1)),
+                    [eventData],
+                    cancellationToken: cancellationToken);
+            }
+
+            expectedVersion++;
         }
     }
 

@@ -8,6 +8,8 @@ public abstract class AggregateRootBase : IAggregateRoot
 
     public virtual string AggregateName => this.GetType().Name;
 
+    public long Version { get; private set; }
+
     public IEnumerable<IAggregateEvent> GetUncommittedEvents() => this._uncommittedEvents.AsReadOnly();
 
     protected void ApplyEvent(IAggregateEvent @event)
@@ -19,6 +21,7 @@ public abstract class AggregateRootBase : IAggregateRoot
     protected void ApplyEventWithoutRecording(IAggregateEvent @event)
     {
         this.When(@event);
+        this.Version++;
     }
 
     protected void ApplyEventsWithoutRecording(IEnumerable<IAggregateEvent> events)
