@@ -81,7 +81,7 @@ public sealed class ReadModelHydration(
     private async Task<IReadModelHydrator> StartHydration(IServiceProvider serviceProvider, CancellationToken stoppingToken)
     {
         var hydrator = serviceProvider.GetRequiredService<IReadModelHydrator>();
-        await hydrator.Subscribe(stoppingToken);
+        await hydrator.Subscribe(this.Settings.ReadModelHydration.SubscriptionName, stoppingToken);
         return hydrator;
     }
 }
