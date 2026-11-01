@@ -8,6 +8,7 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services,
         ISettings settings)
     {
+        services.AddScoped<Func<IRequestBuilder>>(_ => () => new RequestBuilder());
         services.AddHttpClient<UserAccounts.IUserAccountsClient, UserAccounts.UserAccountsClient>(settings);
 
         return services;

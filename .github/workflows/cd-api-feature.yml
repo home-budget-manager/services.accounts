@@ -3,10 +3,6 @@ name: Publish test container
 on:
   workflow_dispatch:
 
-concurrency:
-  group: cd-develop
-  cancel-in-progress: true
-
 jobs:
   build-and-push:
     name: Build and push Docker image
