@@ -18,9 +18,19 @@ public sealed class AccountInfoRepository(
     {
         var collection = this.collectionProvider.Accounts;
         var accountInfoDto = Map(accountInfo);
-        await collection.InsertOneAsync(
-            accountInfoDto,
-            null,
+        await collection.UpdateOneAsync(
+            Builders<AccountInfoDto>.Filter.Eq(a => a.Id, accountInfoDto.Id),
+            Builders<AccountInfoDto>.Update
+                .SetOnInsert(a => a.Name, accountInfoDto.Name)
+                .SetOnInsert(a => a.CreationDate, accountInfoDto.CreationDate)
+                .SetOnInsert(a => a.LastModificationDate, accountInfoDto.LastModificationDate)
+                .SetOnInsert(a => a.Description, accountInfoDto.Description)
+                .SetOnInsert(a => a.AccountType, accountInfoDto.AccountType)
+                .SetOnInsert(a => a.CurrentBalance, accountInfoDto.CurrentBalance)
+                .SetOnInsert(a => a.Currency, accountInfoDto.Currency)
+                .SetOnInsert(a => a.OwnerId, accountInfoDto.OwnerId)
+                .SetOnInsert(a => a.IsActive, accountInfoDto.IsActive),
+            new UpdateOptions { IsUpsert = true },
             cancellationToken);
     }
 
