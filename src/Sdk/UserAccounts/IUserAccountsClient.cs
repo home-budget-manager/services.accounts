@@ -9,4 +9,8 @@ public interface IUserAccountsClient
     Task<ResponseWrapper<GetUserAccountsResponse>> GetUserAccounts(
         GetUserAccountsRequest request,
         CancellationToken cancellationToken);
+
+    Task<ResponseWrapper<GetUserAccountResponse>> GetUserAccount(
+        GetUserAccountRequest request,
+        CancellationToken cancellationToken);
 }

@@ -5,32 +5,26 @@ using System.Collections.ObjectModel;
 public sealed class GetUserAccountsResponse(
     IEnumerable<GetUserAccountsResponse.Account> accounts)
 {
-    public ReadOnlyCollection<GetUserAccountsResponse.Account> Accounts { get; } = new((accounts ?? []).ToList());
+    public ReadOnlyCollection<Account> Accounts { get; } = new([.. (accounts ?? [])]);
 
     public sealed class Account(
-    Guid id,
-    string name,
-    Account.AccType accountType,
-    string currency,
-    decimal balance)
+        Guid id,
+        string name,
+        AccountType accountType,
+        string currency,
+        decimal balance,
+        bool isActive)
     {
         public Guid Id { get; } = id;
 
         public string Name { get; } = name;
 
-        public AccType AccountType { get; } = accountType;
+        public AccountType AccountType { get; } = accountType;
 
         public string Currency { get; } = currency;
 
         public decimal Balance { get; } = balance;
 
-        public sealed class AccType(
-            int id,
-            string name)
-        {
-            public int Id { get; } = id;
-
-            public string Name { get; } = name;
-        }
+        public bool IsActive { get; } = isActive;
     }
 }

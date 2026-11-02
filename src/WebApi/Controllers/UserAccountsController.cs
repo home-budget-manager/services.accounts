@@ -46,7 +46,7 @@ public sealed class UserAccountsController(
         var output = new AccountDetails(
             result.Id.ToGuid(),
             result.Name,
-            result.AccountType.Name,
+            new(result.AccountType.Id, result.AccountType.Name),
             result.CreationDate,
             result.Description,
             result.CurrentBalance,

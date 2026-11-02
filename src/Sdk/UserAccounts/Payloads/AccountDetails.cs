@@ -3,7 +3,7 @@
 public sealed class AccountDetails(
     Guid accountId,
     string name,
-    string accountType,
+    AccountType accountType,
     DateTimeOffset creationDate,
     string description,
     decimal balance,
@@ -14,7 +14,7 @@ public sealed class AccountDetails(
 
     public string Name { get; } = name;
 
-    public string AccountType { get; } = accountType;
+    public AccountType AccountType { get; } = accountType;
 
     public DateTimeOffset CreationDate { get; } = creationDate;
 
