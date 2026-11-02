@@ -10,7 +10,7 @@ public sealed class DictionariesClient(
 
     private readonly Func<IRequestBuilder> requestBuilderFactory = requestBuilderFactory;
 
-    public async Task<ResponseWrapper<CreateAccountTypeResponse>> CreateAccountTypeAsync(CreateAccountTypeRequest request, CancellationToken cancellationToken)
+    public async Task<ResponseWrapper<CreateAccountTypeResponse>> CreateAccountType(CreateAccountTypeRequest request, CancellationToken cancellationToken)
     {
         var apiRequest = this.requestBuilderFactory()
             .WithTarget("api/dictionaries/account-types", HttpMethod.Post)
@@ -31,7 +31,7 @@ public sealed class DictionariesClient(
         }
     }
 
-    public async Task<ResponseWrapper<GetAccountTypesResponse>> GetAccountTypesAsync(GetAccountTypesRequest request, CancellationToken cancellationToken)
+    public async Task<ResponseWrapper<GetAccountTypesResponse>> GetAccountTypes(GetAccountTypesRequest request, CancellationToken cancellationToken)
     {
         var apiRequest = this.requestBuilderFactory()
             .WithTarget("api/dictionaries/account-types", HttpMethod.Get)

@@ -2,11 +2,11 @@
 
 public interface IDictionariesClient
 {
-    Task<ResponseWrapper<CreateAccountTypeResponse>> CreateAccountTypeAsync(
+    Task<ResponseWrapper<CreateAccountTypeResponse>> CreateAccountType(
         CreateAccountTypeRequest request,
         CancellationToken cancellationToken);
 
-    Task<ResponseWrapper<GetAccountTypesResponse>> GetAccountTypesAsync(
+    Task<ResponseWrapper<GetAccountTypesResponse>> GetAccountTypes(
         GetAccountTypesRequest request,
         CancellationToken cancellationToken);
 }
