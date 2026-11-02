@@ -1,6 +1,6 @@
-﻿namespace HomeBudgetManager.Services.Accounts.WebApi.Controllers.Dictionaries;
+﻿namespace HomeBudgetManager.Services.Accounts.Sdk.Dictionaries.Payloads;
 
-public sealed class Item(
+public sealed class DictionaryItem(
     int id,
     string displayName)
 {
