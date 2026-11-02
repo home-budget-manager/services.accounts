@@ -1,6 +1,6 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.WebApi.Controllers.Dictionaries;
 
-public class Item(
+public sealed class Item(
     int id,
     string displayName)
 {

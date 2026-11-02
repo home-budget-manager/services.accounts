@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
 [ApiController]
-public class DictionariesController(
+public sealed class DictionariesController(
     IMediator mediator) : ControllerBase
 {
     private const string GetAccountTypesRouteName = "GetAccountTypes";

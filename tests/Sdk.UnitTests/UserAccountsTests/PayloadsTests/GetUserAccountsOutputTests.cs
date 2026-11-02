@@ -4,7 +4,7 @@ using System.Text.Json;
 
 using Output = HomeBudgetManager.Services.Accounts.Sdk.UserAccounts.Payloads;
 
-public class GetUserAccountsOutputTests
+public sealed class GetUserAccountsOutputTests
 {
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {

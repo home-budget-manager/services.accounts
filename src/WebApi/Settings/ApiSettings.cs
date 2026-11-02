@@ -1,6 +1,6 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.WebApi.Settings;
 
-public class ApiSettings
+public sealed class ApiSettings
 {
     public const string SectionName = "Api";
 

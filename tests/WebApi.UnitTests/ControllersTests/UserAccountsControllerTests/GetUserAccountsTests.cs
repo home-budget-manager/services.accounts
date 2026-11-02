@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-public class GetUserAccountsTests : TestsBase
+public sealed class GetUserAccountsTests : TestsBase
 {
     private IResult result = null!;
 

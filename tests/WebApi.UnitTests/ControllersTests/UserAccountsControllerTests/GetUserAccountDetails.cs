@@ -7,7 +7,7 @@ using HomeBudgetManager.Services.Accounts.Sdk.UserAccounts.Payloads;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-public class GetUserAccountDetailsTests : TestsBase
+public sealed class GetUserAccountDetailsTests : TestsBase
 {
     private Guid accountId;
 

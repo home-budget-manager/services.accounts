@@ -1,6 +1,6 @@
 ﻿namespace HomeBudgetManager.Services.Accounts.Domain.Contractors.AggregateEvents;
 
-public record class ContractorCreated(
+public sealed record class ContractorCreated(
     ContractorId Id,
     string Name) : IAggregateEvent, IAggregateCreationEvent
 {

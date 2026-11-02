@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/[controller]")]
 [ApiController]
 
-public class UserAccountsController(
+public sealed class UserAccountsController(
     IMediator mediator) : ControllerBase
 {
     private const string GetAccountDetailsRouteName = "GetUserAccountDetails";
