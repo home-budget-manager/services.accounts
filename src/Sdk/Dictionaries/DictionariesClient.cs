@@ -13,7 +13,7 @@ public sealed class DictionariesClient(
     public async Task<ResponseWrapper<CreateAccountTypeResponse>> CreateAccountType(CreateAccountTypeRequest request, CancellationToken cancellationToken)
     {
         var apiRequest = this.requestBuilderFactory()
-            .WithTarget("api/dictionaries/account-types", HttpMethod.Post)
+            .WithTarget("/api/dictionaries/account-types", HttpMethod.Post)
             .WithBody(request.Name)
             .Build();
         var apiResponse = await this.client.SendAsync(apiRequest, cancellationToken);
