@@ -27,7 +27,6 @@ public sealed class CreateAccountTypeCommandHandler(
         }
 
         dictionariesAggregate.AddAccountType(newId, command.Name);
-        var newEvents = dictionariesAggregate.GetUncommittedEvents();
         await this.eventsStorage.Store(dictionariesAggregate, cancellationToken);
         return new CommandResults.Success();
     }

@@ -17,7 +17,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<Dictionaries.IDictionariesCache, Dictionaries.DictionariesCache>();
         services
             .RegisterCommandHandler<Domain.Accounts.CreateAccountCommand, Accounts.CreateAccountCommandHandler>()
-            .RegisterCommandHandler<Domain.Dictionaries.CreateAccountTypeCommand, Dictionaries.CreateAccountTypeCommandHandler>();
+            .RegisterCommandHandler<Domain.Dictionaries.CreateAccountTypeCommand, Dictionaries.CreateAccountTypeCommandHandler>()
+            .RegisterCommandHandler<Domain.Dictionaries.UpdateAccountTypeCommand, Dictionaries.UpdateAccountTypeCommandHandler>();
 
         services
             .RegisterQueryHandler<Domain.Accounts.GetAccountDetailsResult?, Accounts.GetAccountDetailsQueryHandler>()
@@ -27,7 +28,8 @@ public static class ServiceCollectionExtensions
         services
             .RegisterProjectionHandler<Domain.Accounts.AggregateEvents.AccountCreated, Accounts.Projections.Handlers.AccountCreatedProjectionHandler>()
             .RegisterProjectionHandler<Domain.Dictionaries.AggregateEvents.DictionariesCreated, Dictionaries.CacheInvalidation.DictionariesCreatedProjectionHandler>()
-            .RegisterProjectionHandler<Domain.Dictionaries.AggregateEvents.AccountTypeAdded, Dictionaries.CacheInvalidation.AccountTypeAddedProjectionHandler>();
+            .RegisterProjectionHandler<Domain.Dictionaries.AggregateEvents.AccountTypeAdded, Dictionaries.CacheInvalidation.AccountTypeAddedProjectionHandler>()
+            .RegisterProjectionHandler<Domain.Dictionaries.AggregateEvents.AccountTypeChanged, Dictionaries.CacheInvalidation.AccountTypeChangedProjectionHandler>();
 
         var configurationSetup = new ConfigurationSetup();
         configure(configurationSetup);

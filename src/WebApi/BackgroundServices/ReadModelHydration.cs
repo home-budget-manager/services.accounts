@@ -5,11 +5,14 @@ using HomeBudgetManager.Services.Accounts.WebApi.Settings;
 
 using KurrentDB.Client;
 
+using Grpc.Core;
+
 using Microsoft.Extensions.Options;
 
 public sealed class ReadModelHydration(
     IServiceScopeFactory serviceScopeFactory,
-    IOptions<KurrentDbSettings> kurrentSettingsOptions)
+    IOptions<KurrentDbSettings> kurrentSettingsOptions,
+    ILogger<ReadModelHydration> logger)
     : BackgroundService
 {
     private KurrentDbSettings Settings => kurrentSettingsOptions.Value;
@@ -29,15 +32,31 @@ public sealed class ReadModelHydration(
         var client = serviceProvider.GetRequiredService<KurrentDBPersistentSubscriptionsClient>();
         var subscriptionExists = true;
         PersistentSubscriptionInfo? info = null;
-        try
+
+        while (true)
         {
-            info = await client.GetInfoToAllAsync(
-                this.Settings.ReadModelHydration.SubscriptionName,
-                cancellationToken: cancellationToken);
-        }
-        catch (PersistentSubscriptionNotFoundException)
-        {
-            subscriptionExists = false;
+            cancellationToken.ThrowIfCancellationRequested();
+
+            try
+            {
+                info = await client.GetInfoToAllAsync(
+                    this.Settings.ReadModelHydration.SubscriptionName,
+                    cancellationToken: cancellationToken);
+                break;
+            }
+            catch (PersistentSubscriptionNotFoundException)
+            {
+                subscriptionExists = false;
+                break;
+            }
+            catch (Exception exception) when (
+                IsTransient(exception) && !cancellationToken.IsCancellationRequested)
+            {
+                logger.LogWarning(
+                    exception,
+                    "Transient failure while configuring the read model subscription. Retrying in 5 seconds.");
+                await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
+            }
         }
 
         if (!subscriptionExists)
@@ -76,6 +95,15 @@ public sealed class ReadModelHydration(
                             checkPointAfter: TimeSpan.FromMilliseconds(subscriptionSettings.CheckpointAfterMs),
                             checkPointLowerBound: subscriptionSettings.CheckpointLowerBound,
                             checkPointUpperBound: subscriptionSettings.CheckpointUpperBound);
+    }
+
+    private static bool IsTransient(Exception exception)
+    {
+        return exception is NotLeaderException
+            || exception is RpcException
+            {
+                StatusCode: Grpc.Core.StatusCode.Unavailable or Grpc.Core.StatusCode.DeadlineExceeded
+            };
     }
 
     private async Task<IReadModelHydrator> StartHydration(IServiceProvider serviceProvider, CancellationToken stoppingToken)

@@ -2,7 +2,7 @@
 
 using HomeBudgetManager.Services.Accounts.Sdk.UserAccounts.Payloads;
 
-public class AccountInfoTests
+public sealed class AccountInfoTests
 {
     private Guid accountId;
 

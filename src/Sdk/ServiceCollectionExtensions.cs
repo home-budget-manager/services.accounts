@@ -10,6 +10,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<Func<IRequestBuilder>>(_ => () => new RequestBuilder());
         services.AddHttpClient<UserAccounts.IUserAccountsClient, UserAccounts.UserAccountsClient>(settings);
+        services.AddHttpClient<Dictionaries.IDictionariesClient, Dictionaries.DictionariesClient>(settings);
 
         return services;
     }

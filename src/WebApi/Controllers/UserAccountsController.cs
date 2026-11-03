@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/[controller]")]
 [ApiController]
 
-public class UserAccountsController(
+public sealed class UserAccountsController(
     IMediator mediator) : ControllerBase
 {
     private const string GetAccountDetailsRouteName = "GetUserAccountDetails";
@@ -46,7 +46,7 @@ public class UserAccountsController(
         var output = new AccountDetails(
             result.Id.ToGuid(),
             result.Name,
-            result.AccountType.Name,
+            new(result.AccountType.Id, result.AccountType.Name),
             result.CreationDate,
             result.Description,
             result.CurrentBalance,

@@ -5,7 +5,7 @@ using HomeBudgetManager.Services.Accounts.Domain;
 using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
 using HomeBudgetManager.Services.Accounts.Domain.Dictionaries.AggregateEvents;
 
-public class EventsStorageExtensionsTests
+public sealed class EventsStorageExtensionsTests
 {
     [Fact]
     public async Task Store_UsesTheLoadedAggregateVersion()

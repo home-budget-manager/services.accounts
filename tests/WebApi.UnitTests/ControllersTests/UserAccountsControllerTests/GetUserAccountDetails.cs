@@ -7,7 +7,7 @@ using HomeBudgetManager.Services.Accounts.Sdk.UserAccounts.Payloads;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-public class GetUserAccountDetailsTests : TestsBase
+public sealed class GetUserAccountDetailsTests : TestsBase
 {
     private Guid accountId;
 
@@ -61,7 +61,9 @@ public class GetUserAccountDetailsTests : TestsBase
         var accountDetails = okResult.Value!;
         accountDetails.AccountId.ShouldBe(this.accountId);
         accountDetails.Name.ShouldBe("Checking Account");
-        accountDetails.AccountType.ShouldBe("TEST");
+        accountDetails.AccountType.ShouldNotBeNull();
+        accountDetails.AccountType.Id.ShouldBe(1);
+        accountDetails.AccountType.Name.ShouldBe("TEST");
         accountDetails.Description.ShouldBe("This is a checking account.");
         accountDetails.Balance.ShouldBe(1000.00m);
         accountDetails.Currency.ShouldBe("USD");

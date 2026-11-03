@@ -12,7 +12,7 @@ public static class Results
         return new ServerError(message);
     }
 
-    public class UserError
+    public sealed class UserError
     {
         public UserError(string message)
         {
@@ -22,7 +22,7 @@ public static class Results
         public string Message { get; }
     }
 
-    public class ServerError
+    public sealed class ServerError
     {
         public ServerError(string message)
         {

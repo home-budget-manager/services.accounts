@@ -3,7 +3,7 @@
 using HomeBudgetManager.Services.Accounts.Domain.Contractors;
 using HomeBudgetManager.Services.Accounts.Domain.Dictionaries;
 
-public record class AccountCreated(
+public sealed record class AccountCreated(
     AccountId Id,
     string Name,
     DateTimeOffset CreationDate,

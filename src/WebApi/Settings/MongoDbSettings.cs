@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 
-public class MongoDbSettings
+public sealed class MongoDbSettings
 {
     public const string SectionName = "MongoDb";
 

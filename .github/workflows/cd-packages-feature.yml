@@ -30,7 +30,7 @@ jobs:
             exit 1
           fi
           RUN_DATE=$(date -u "+%Y%m%d-%H%M")
-          echo "package_version=${VERSION}-test-${RUN_DATE}" >> "$GITHUB_OUTPUT"
+          echo "package_version=${VERSION}-feature-${RUN_DATE}" >> "$GITHUB_OUTPUT"
 
       - name: Restore dependencies
         run: dotnet restore Services.Accounts.slnx

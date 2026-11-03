@@ -4,7 +4,7 @@ using HomeBudgetManager.Services.Accounts.Infrastructure.EventsSourcing.Kurrent;
 
 using KurrentDB.Client;
 
-public class KurrentDbSettings
+public sealed class KurrentDbSettings
 {
     public const string SectionName = "KurrentDb";
 
