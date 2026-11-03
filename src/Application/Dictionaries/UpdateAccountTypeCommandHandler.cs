@@ -23,6 +23,12 @@ public sealed class UpdateAccountTypeCommandHandler(
             return new CommandResults.Failure("AccountTypeNotFound");
         }
 
+        if (dictionariesAggregate.AccountTypes.Any(at =>
+            at.Id != command.Id && at.Name.Equals(command.DisplayName, StringComparison.OrdinalIgnoreCase)))
+        {
+            return new CommandResults.Failure("AccountTypeNameAlreadyExists");
+        }
+
         dictionariesAggregate.UpdateAccountType(command.Id, command.DisplayName);
         await this.eventsStorage.Store(dictionariesAggregate, cancellationToken);
         return new CommandResults.Success();

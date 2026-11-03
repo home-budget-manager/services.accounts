@@ -46,7 +46,9 @@ public sealed class DictionariesController(
         var result = await this.mediator.Execute(command, cancellationToken);
         return result.Match(
             _ => Results.NoContent(),
-            _ => Results.InternalServerError());
+            failure => failure.ErrorMessage == "AccountTypeNameAlreadyExists"
+                ? Results.Conflict()
+                : Results.InternalServerError());
     }
 
     [HttpPost("account-types")]
