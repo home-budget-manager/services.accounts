@@ -34,7 +34,7 @@ public sealed class DictionariesClient(
     public async Task<ResponseWrapper<UpdateAccountTypeResponse>> UpdateAccountType(UpdateAccountTypeRequest request, CancellationToken cancellationToken)
     {
         var apiRequest = this.requestBuilderFactory()
-            .WithTarget($"api/dictionaries/account-types/{request.AccountData.Id}", HttpMethod.Put)
+            .WithTarget($"/api/dictionaries/account-types/{request.AccountData.Id}", HttpMethod.Put)
             .WithBody(request.AccountData.Name)
             .Build();
         var apiResponse = await this.client.SendAsync(apiRequest, cancellationToken);
@@ -55,7 +55,7 @@ public sealed class DictionariesClient(
     public async Task<ResponseWrapper<GetAccountTypesResponse>> GetAccountTypes(GetAccountTypesRequest request, CancellationToken cancellationToken)
     {
         var apiRequest = this.requestBuilderFactory()
-            .WithTarget("api/dictionaries/account-types", HttpMethod.Get)
+            .WithTarget("/api/dictionaries/account-types", HttpMethod.Get)
             .Build();
         var apiResponse = await this.client.SendAsync(apiRequest, cancellationToken);
         if (apiResponse.IsSuccessStatusCode)
