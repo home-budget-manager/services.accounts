@@ -1,13 +1,10 @@
-name: Publish develop NuGet Packages
+name: Publish RC NuGet Packages
 
 on:
   push:
     branches:
-      - develop
-
-concurrency:
-  group: publish-nuget-develop
-  cancel-in-progress: true
+      - release/*
+      - hotfix/*
 
 jobs:
   publish:
@@ -36,7 +33,7 @@ jobs:
             exit 1
           fi
           RUN_DATE=$(date -u "+%Y%m%d-%H%M")
-          echo "package_version=${VERSION}-develop-${RUN_DATE}" >> "$GITHUB_OUTPUT"
+          echo "package_version=${VERSION}-rc-${RUN_DATE}" >> "$GITHUB_OUTPUT"
 
       - name: Restore dependencies
         run: dotnet restore Services.Accounts.slnx

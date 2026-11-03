@@ -1,13 +1,10 @@
-name: Publish develop containers
+name: Publish RC containers
 
 on:
   push:
     branches:
-      - develop
-
-concurrency:
-  group: cd-develop
-  cancel-in-progress: true
+      - release/*
+      - hotfix/*
 
 jobs:
   build-and-push:
@@ -31,7 +28,7 @@ jobs:
             exit 1
           fi
           RUN_DATE=$(date -u "+%Y%m%d-%H%M")
-          echo "tag=${VERSION}-develop-${RUN_DATE}" >> "$GITHUB_OUTPUT"
+          echo "tag=${VERSION}-rc-${RUN_DATE}" >> "$GITHUB_OUTPUT"
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -48,4 +45,4 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.tag }}
-            ghcr.io/${{ github.repository }}:develop
+            ghcr.io/${{ github.repository }}:rc
