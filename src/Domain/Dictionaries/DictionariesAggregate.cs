@@ -50,15 +50,35 @@ public sealed class DictionariesAggregate : AggregateRootBase
         this.ApplyEvent(@event);
     }
 
+    public void UpdateAccountType(int id, string newName)
+    {
+        var accountTypeExists = accountTypes.Count(at => at.Id == id) == 1;
+        if (!accountTypeExists)
+        {
+            throw new InvalidOperationException($"Account type with ID {id} does not exist.");
+        }
+
+        if (accountTypes.Any(at => at.Name.Equals(newName, StringComparison.OrdinalIgnoreCase) && at.Id != id))
+        {
+            throw new InvalidOperationException($"Account type with name '{newName}' already exists.");
+        }
+
+        var @event = new AccountTypeChanged(this.AggregateId, id, newName);
+        this.ApplyEvent(@event);
+    }
+
     protected override void When(IAggregateEvent @event)
     {
-        switch(@event)
+        switch (@event)
         {
             case DictionariesCreated dictionariesCreated:
                 this.When(dictionariesCreated);
                 break;
             case AccountTypeAdded accountTypeAdded:
                 this.When(accountTypeAdded);
+                break;
+            case AccountTypeChanged accountTypeChanged:
+                this.When(accountTypeChanged);
                 break;
             default:
                 throw new InvalidOperationException($"Unhandled event type: {@event.GetType().Name}");
@@ -74,5 +94,13 @@ public sealed class DictionariesAggregate : AggregateRootBase
     {
         var accountType = new AccountType(@event.Id, @event.Name);
         accountTypes.Add(accountType);
+    }
+
+    private void When(AccountTypeChanged @event)
+    {
+        var currentAccountType = accountTypes.Single(at => at.Id == @event.Id);
+        var accountType = accountTypes.IndexOf(currentAccountType);
+        var newAccountType = new AccountType(@event.Id, @event.Name);
+        accountTypes[accountType] = newAccountType;
     }
 }

@@ -31,6 +31,27 @@ public sealed class DictionariesClient(
         }
     }
 
+    public async Task<ResponseWrapper<UpdateAccountTypeResponse>> UpdateAccountType(UpdateAccountTypeRequest request, CancellationToken cancellationToken)
+    {
+        var apiRequest = this.requestBuilderFactory()
+            .WithTarget($"api/dictionaries/account-types/{request.AccountData.Id}", HttpMethod.Put)
+            .WithBody(request.AccountData.Name)
+            .Build();
+        var apiResponse = await this.client.SendAsync(apiRequest, cancellationToken);
+        if (apiResponse.IsSuccessStatusCode)
+        {
+            return new ResponseWrapper<UpdateAccountTypeResponse>(new UpdateAccountTypeResponse());
+        }
+        else if ((int)apiResponse.StatusCode >= 400 && (int)apiResponse.StatusCode < 500)
+        {
+            return new ResponseWrapper<UpdateAccountTypeResponse>(Results.CreateUserError("InvalidInput"));
+        }
+        else
+        {
+            return new ResponseWrapper<UpdateAccountTypeResponse>(Results.CreateServerError("ServerError"));
+        }
+    }
+
     public async Task<ResponseWrapper<GetAccountTypesResponse>> GetAccountTypes(GetAccountTypesRequest request, CancellationToken cancellationToken)
     {
         var apiRequest = this.requestBuilderFactory()

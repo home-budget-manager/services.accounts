@@ -25,6 +25,30 @@ public sealed class DictionariesController(
         return Results.Ok(output);
     }
 
+    [HttpPut("account-types/{id}")]
+    public async Task<IResult> UpdateAccountType(
+        [FromRoute] int id,
+        [FromBody] string displayName,
+        CancellationToken cancellationToken)
+    {
+        var accountTypes = await this.mediator.Fetch(new FetchAccountTypesQuery(), cancellationToken);
+        if (!accountTypes.AccountTypes.Any(at => at.Id == id))
+        {
+            return Results.NotFound();
+        }
+
+        if (string.IsNullOrWhiteSpace(displayName))
+        {
+            return Results.BadRequest();
+        }
+
+        var command = new UpdateAccountTypeCommand(id, displayName);
+        var result = await this.mediator.Execute(command, cancellationToken);
+        return result.Match(
+            _ => Results.NoContent(),
+            _ => Results.InternalServerError());
+    }
+
     [HttpPost("account-types")]
     public async Task<IResult> CreateAccountType([FromBody] string displayName, CancellationToken cancellationToken)
     {

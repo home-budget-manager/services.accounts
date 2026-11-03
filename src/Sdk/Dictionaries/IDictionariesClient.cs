@@ -6,6 +6,10 @@ public interface IDictionariesClient
         CreateAccountTypeRequest request,
         CancellationToken cancellationToken);
 
+    Task<ResponseWrapper<UpdateAccountTypeResponse>> UpdateAccountType(
+        UpdateAccountTypeRequest request,
+        CancellationToken cancellationToken);
+
     Task<ResponseWrapper<GetAccountTypesResponse>> GetAccountTypes(
         GetAccountTypesRequest request,
         CancellationToken cancellationToken);

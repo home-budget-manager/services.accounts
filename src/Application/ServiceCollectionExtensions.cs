@@ -17,7 +17,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<Dictionaries.IDictionariesCache, Dictionaries.DictionariesCache>();
         services
             .RegisterCommandHandler<Domain.Accounts.CreateAccountCommand, Accounts.CreateAccountCommandHandler>()
-            .RegisterCommandHandler<Domain.Dictionaries.CreateAccountTypeCommand, Dictionaries.CreateAccountTypeCommandHandler>();
+            .RegisterCommandHandler<Domain.Dictionaries.CreateAccountTypeCommand, Dictionaries.CreateAccountTypeCommandHandler>()
+            .RegisterCommandHandler<Domain.Dictionaries.UpdateAccountTypeCommand, Dictionaries.UpdateAccountTypeCommandHandler>();
 
         services
             .RegisterQueryHandler<Domain.Accounts.GetAccountDetailsResult?, Accounts.GetAccountDetailsQueryHandler>()
