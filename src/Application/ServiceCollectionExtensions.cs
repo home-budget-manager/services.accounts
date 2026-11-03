@@ -28,7 +28,8 @@ public static class ServiceCollectionExtensions
         services
             .RegisterProjectionHandler<Domain.Accounts.AggregateEvents.AccountCreated, Accounts.Projections.Handlers.AccountCreatedProjectionHandler>()
             .RegisterProjectionHandler<Domain.Dictionaries.AggregateEvents.DictionariesCreated, Dictionaries.CacheInvalidation.DictionariesCreatedProjectionHandler>()
-            .RegisterProjectionHandler<Domain.Dictionaries.AggregateEvents.AccountTypeAdded, Dictionaries.CacheInvalidation.AccountTypeAddedProjectionHandler>();
+            .RegisterProjectionHandler<Domain.Dictionaries.AggregateEvents.AccountTypeAdded, Dictionaries.CacheInvalidation.AccountTypeAddedProjectionHandler>()
+            .RegisterProjectionHandler<Domain.Dictionaries.AggregateEvents.AccountTypeChanged, Dictionaries.CacheInvalidation.AccountTypeChangedProjectionHandler>();
 
         var configurationSetup = new ConfigurationSetup();
         configure(configurationSetup);
