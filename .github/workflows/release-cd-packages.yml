@@ -6,10 +6,6 @@ on:
       - release/*
       - hotfix/*
 
-concurrency:
-  group: publish-nuget-release
-  cancel-in-progress: true
-
 jobs:
   publish:
     name: Pack and publish to GitHub Packages
