@@ -9,8 +9,6 @@ using HomeBudgetManager.Services.Accounts.Domain;
 
 using KurrentDB.Client;
 
-using Microsoft.Extensions.Logging;
-
 public sealed class ReadModelHydrator(
     KurrentDBPersistentSubscriptionsClient client,
     IProjectionHandlerFactory projectionHandlerFactory) : IReadModelHydrator
@@ -62,6 +60,12 @@ public sealed class ReadModelHydrator(
         PersistentSubscriptionMessage.Event subscriptionEvent)
     {
         var resolvedEvent = subscriptionEvent.ResolvedEvent;
+        if (resolvedEvent.OriginalStreamId.StartsWith('$'))
+        {
+            await subscription.Ack([resolvedEvent]);
+            return;
+        }
+
         try
         {
             var aggregateEvent = await GetEvent(resolvedEvent);
