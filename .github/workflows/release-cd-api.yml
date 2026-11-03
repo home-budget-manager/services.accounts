@@ -6,10 +6,6 @@ on:
       - release/*
       - hotfix/*
 
-concurrency:
-  group: cd-release
-  cancel-in-progress: true
-
 jobs:
   build-and-push:
     name: Build and push Docker image
