@@ -29,15 +29,27 @@ public sealed class ReadModelHydration(
         var client = serviceProvider.GetRequiredService<KurrentDBPersistentSubscriptionsClient>();
         var subscriptionExists = true;
         PersistentSubscriptionInfo? info = null;
-        try
+
+        while (true)
         {
-            info = await client.GetInfoToAllAsync(
-                this.Settings.ReadModelHydration.SubscriptionName,
-                cancellationToken: cancellationToken);
-        }
-        catch (PersistentSubscriptionNotFoundException)
-        {
-            subscriptionExists = false;
+            cancellationToken.ThrowIfCancellationRequested();
+
+            try
+            {
+                info = await client.GetInfoToAllAsync(
+                    this.Settings.ReadModelHydration.SubscriptionName,
+                    cancellationToken: cancellationToken);
+                break;
+            }
+            catch (PersistentSubscriptionNotFoundException)
+            {
+                subscriptionExists = false;
+                break;
+            }
+            catch when (!cancellationToken.IsCancellationRequested)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
+            }
         }
 
         if (!subscriptionExists)
